@@ -1,6 +1,6 @@
 # Final Project Proposal
 
-**GitHub Repo URL**: TODO
+**GitHub Repo URL**: (https://github.com/CMU-IDS-Fall-2022/final-project-foodrescuers)
 
 Team: Durvesh Vilas Malpure, Michael Van Buren, Neha Nishikant, Uyen Tran, & Abubakir Siedahmed
 

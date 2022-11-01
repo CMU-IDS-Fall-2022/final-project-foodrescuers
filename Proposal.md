@@ -15,9 +15,9 @@ Based on the dataset of recipes and food waste, we are planning to use a similar
 Since our project aims to reduce the amount of food waste one person at a time, we will inform users of how much they’re saving and how much they will save. We believe that providing the user with a concrete number could motivate users to continue using our system. To calculate the waste avoided, we plan to sum the waste avoided for each ingredient which can be found by multiplying the carbon footprint of an ingredient per 100 grams. Once we have that, then we can calculate the waste avoided by the amount of that ingredient in the recipe. Lastly, we’ll forecast to the user the amount of waste avoided over a period of time depending on how often the user makes the dishes.
 
 
-**Citations**: 
-How we fight food waste in the US. Feeding America. (n.d.). Retrieved October 31, 2022, from https://www.feedingamerica.org/our-work/our-approach/reduce-food-waste
-“5 Facts about Food Waste and Hunger | World Food Programme.” Wfp.org, 2 June 2020, www.wfp.org/stories/5-facts-about-food-waste-and-hunger. Accessed 1 Nov. 2022.
+**Citations**: \
+How we fight food waste in the US. Feeding America. (n.d.). Retrieved October 31, 2022, from https://www.feedingamerica.org/our-work/our-approach/reduce-food-waste \
+“5 Facts about Food Waste and Hunger | World Food Programme.” Wfp.org, 2 June 2020, www.wfp.org/stories/5-facts-about-food-waste-and-hunger. Accessed 1 Nov. 2022. \
 Recipe1M+: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and Food Images, http://pic2recipe.csail.mit.edu/
 
 

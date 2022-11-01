@@ -4,7 +4,7 @@
 
 Team: Durvesh Vilas Malpure, Michael Van Buren, Neha Nishikant, Uyen Tran, & Abubakir Siedahmed
 
-How can we apply modern data science tools to help reduce food waste?
+# # How can we apply modern data science tools to help reduce food waste?
 
 According to the United States Department of Agriculture (USDA), between 30 - 40 percent of the food supply in the US is wasted. This corresponds to about 133 billion pounds and $161 billion worth of food in 2010. This is not just a problem in the United States; one-third of food produced for human consumption is lost or wasted globally. This amounts to 1.3 billion tons annually, worth approximately $1 trillion. If wasted food were a country, it would be the world's third-largest producer of carbon dioxide, after the USA and China (“5 Facts about Food Waste and Hunger | World Food Programme”). We’d like to pose the following question, how can we do our part to best reduce food waste? To answer this question, we will develop an application that will allow people to make conscious decisions about the food they already have to reduce waste. We plan to provide an user interface where the user can input the ingredients they have at home, find popular recipes with those ingredients, and provide the most environmentally friendly dish they can make with their home ingredients. 
 

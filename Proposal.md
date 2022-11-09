@@ -19,9 +19,9 @@ Since our project aims to reduce the amount of food waste one person at a time, 
 How we fight food waste in the US. Feeding America. (n.d.). Retrieved October 31, 2022, from https://www.feedingamerica.org/our-work/our-approach/reduce-food-waste \
 “5 Facts about Food Waste and Hunger | World Food Programme.” Wfp.org, 2 June 2020, www.wfp.org/stories/5-facts-about-food-waste-and-hunger. Accessed 1 Nov. 2022. \
 Recipe1M+: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and Food Images, http://pic2recipe.csail.mit.edu/
-“Data Explorer: Environmental Impacts of Food.” Our World in Data, Global Change Data Lab, 2018, https://ourworldindata.org/explorers/food-footprints. 
+“Data Explorer: Environmental Impacts of Food.” Our World in Data, Global Change Data Lab, 2018, https://ourworldindata.org/explorers/food-footprints. \
 
-\
+
 
 # Sketches and Data Analysis
 

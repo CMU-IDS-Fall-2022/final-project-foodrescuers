@@ -22,7 +22,6 @@ Recipe1M+: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and
 “Data Explorer: Environmental Impacts of Food.” Our World in Data, Global Change Data Lab, 2018, https://ourworldindata.org/explorers/food-footprints. 
 
 \
-\
 
 # Sketches and Data Analysis
 

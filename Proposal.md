@@ -25,7 +25,60 @@ Recipe1M+: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and
 
 # Sketches and Data Analysis
 
-## Data Processing
-
 ## System Design
 
+**Narrative**:
+
+We want to introduce the user to the problem of food waste by showing the user how much food their home country wasted since the time they were born. Users will be able to select their country of interest, Year(s) they are interested in, and commodity to see the loss percentage of food for each year for the commodities they are interested. The graphic below will filter baked on the user input to show the percentage of commodities that were lost for each country within the given time period. Pre-processing will include the country, commodities, and the years list from the dataset. Link to the aforementioned dataset: https://www.fao.org/platform-food-loss-waste/flw-data/en/ 
+
+![Narrative graph](images/narrative.png "image_tooltip")
+<center>(Image 1. Narrative screen)</center>
+
+![Data processing for food loss waste dataset](images/data_processing_narrative.png "image_tooltip")
+<center>(Image 2. Data processing for food loss waste dataset)</center>
+
+**Main Visualization:**
+
+The main visualization will have side by side charts. On the left hand side, there will be a stacked bar chart that’s broken down by category of land use, water use, Eutrophication and greenhouse gas emission per ingredient. Each bar will show an Impact Index, which indicates the total amount of environmental impact across all types by a weight factor. On the right hand side, there will be a tree map as shown in the picture below.
+
+When the user click on one or more ingredients on the left chart, the charts on the right will change to be like so, where the right hand side shows the combined metrics for all selected ingredients:
+
+![alt_text](images/bar_main.png "image_tooltip")
+<center>(Image 3. Main visualization default screen)</center>
+
+When the user click on one or more ingredients on the left chart, the charts on the right will change to be like so, where the right hand side shows the combined metrics for all selected ingredients:
+
+![alt_text](images/bar_select.png "image_tooltip")
+<center>(Image 4. Bar select screen)</center>
+
+The selected ingredient will be highlighted. The charts on the right will show the different metrics of the impact of that ingredient, along with pictograms of visualizations to convey the amount of the metric.
+
+**Solution:**
+Further, we allow the user to type in whatever ingredients they have. We use the TF-IDF idea to map the typed-in ingredients to the recipes and also the the ingredients in Dataset1. The retrieved recipes dynamically show up on the right. 
+
+For interactivity, the impact visualizations above are modified by the user input. 
+For example, if the user inputs “blue cheese”, that gets mapped to recipes that show up on the side and also gets mapped to “cheese” in the Dataset1 so the “cheese” bar gets highlighted on the above impact visualizations. Below show sketches for the solution section, which would sit below the stacked bar chart visualizations.
+
+![alt_text](images/solution.png "image_tooltip")
+<center>(Image 5. Recipe reccomender solution screen)</center>
+
+When the user chooses our suggested recipe/ ingredient to swap out (optional feature), we will show them metrics of how much they saved by providing them with concrete numbers of easy to visualize impact such as the amount of showers saved, or number of trips from NY to LA saved, or number of tennis courts saved for land use.
+
+![alt_text](images/saving_metrics.png "image_tooltip")
+<center>(Image 6. Updated saving metrics when the user selected suggested recipe)</center>
+
+We will also draw out linear charts that show (for each metric, in diff colors) the amount saved vs. # of meals made.
+
+![alt_text](images/saving_charts.png "image_tooltip")
+<center>(Image 7. Charts showing saving metrics)</center>
+
+## Data Processing
+We don’t need to do any substantial data cleanup since there aren’t any null values in our dataset. However, we do need to do some preprocessing.
+
+We have two main datasets.
+1. Ingredient to environmental impact: [https://ourworldindata.org/explorers/food-footprints](https://ourworldindata.org/explorers/food-footprints) 
+2. Recipe to ingredients dataset: [https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=PP_recipes.csv](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=PP_recipes.csv) 
+
+Firstly, Dataset 1 had 4 separate CSV files for each dimension of environmental impact (greenhouse gas emission, land use, water use, and eutrophication). We merged these 4 files together by row (where each row represents one ingredient) to create 1 CSV file. One quantity we derive from this dataset is a final index of environmental impact which is the sum of all 4 dimensions normalized by the max of that . We will show this quantity via a stacked bar chart.
+
+Next we have to find a way to connect our 2 datasets. The raw recipes file has an ingredient list for each recipe. The ingredients don’t perfectly match the ingredients from Dataset1. For example, Dataset1 has the ingredient “cheese”. Dataset2 on the other hand has “blue cheese”, “cream cheese”, etc. Instead of creating an explicit mapping between the ingredients of the 2 datasets, we will use TF-IDF score where the selected ingredients from Dataset1 is the query and the ingredient lists for the recipes in Dataset2 are the docs. We will use TF-IDF scores to retrieve the highest scoring recipes to recommend to the user. We use cosine similarity to find similar ingredients or recipes similar to an ingredient list.

@@ -41,7 +41,7 @@ Next we have to find a way to connect our 2 datasets. The raw recipes file has a
 
 ![Data processing for recipe dataset](images/recipe_ds_screenshot1.png "image_tooltip")
 <center>(Image 2. Data processing for recipe dataset)</center>
-![Data processing for recipe dataset](images/recipe_ds_screenshot_cheese.png "image_tooltip")
+![Data processing2 for recipe dataset](images/recipe_ds_screenshot_cheese.png "image_tooltip")
 <center>(Image 3. Data processing for recipe dataset)</center>
 
 

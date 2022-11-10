@@ -37,17 +37,21 @@ Firstly, Dataset 1 had 4 separate CSV files for each dimension of environmental 
 Next we have to find a way to connect our 2 datasets. The raw recipes file has an ingredient list for each recipe. The ingredients don’t perfectly match the ingredients from Dataset1. For example, Dataset1 has the ingredient “cheese”. Dataset2 on the other hand has “blue cheese”, “cream cheese”, etc. Instead of creating an explicit mapping between the ingredients of the 2 datasets, we will use TF-IDF score where the selected ingredients from Dataset1 is the query and the ingredient lists for the recipes in Dataset2 are the docs. We will use TF-IDF scores to retrieve the highest scoring recipes to recommend to the user. We use cosine similarity to find similar ingredients or recipes similar to an ingredient list.
 
 
+We also have an additional dataset for some preliminary narrative visualizations: https://www.fao.org/platform-food-loss-waste/flw-data/en/ 
+Pre-processing will include the country, commodities, and the years list from the dataset. 
+![Data processing for food loss waste dataset](images/data_processing_narrative.png "image_tooltip")
+<center>(Image 2. Data processing for food loss waste dataset)</center>
+
+
 ## System Design
 
 **Narrative**:
 
-We want to introduce the user to the problem of food waste by showing the user how much food their home country wasted since the time they were born. Users will be able to select their country of interest, Year(s) they are interested in, and commodity to see the loss percentage of food for each year for the commodities they are interested. The graphic below will filter baked on the user input to show the percentage of commodities that were lost for each country within the given time period. Pre-processing will include the country, commodities, and the years list from the dataset. Link to the aforementioned dataset: https://www.fao.org/platform-food-loss-waste/flw-data/en/ 
+We want to introduce the user to the problem of food waste by showing the user how much food their home country wasted since the time they were born. Users will be able to select their country of interest, Year(s) they are interested in, and commodity to see the loss percentage of food for each year for the commodities they are interested. The graphic below will filter baked on the user input to show the percentage of commodities that were lost for each country within the given time period. 
 
 ![Narrative graph](images/narrative.png "image_tooltip")
 <center>(Image 1. Narrative screen)</center>
 
-![Data processing for food loss waste dataset](images/data_processing_narrative.png "image_tooltip")
-<center>(Image 2. Data processing for food loss waste dataset)</center>
 
 **Main Visualization:**
 

@@ -34,7 +34,7 @@ We have two main datasets.
 
 Firstly, Dataset 1 had 4 separate CSV files for each dimension of environmental impact (greenhouse gas emission, land use, water use, and eutrophication). We merged these 4 files together by row (where each row represents one ingredient) to create 1 CSV file. One quantity we derive from this dataset is a final index of environmental impact which is the sum of all 4 dimensions normalized by the max of that . We will show this quantity via a stacked bar chart.
 
-![Data processing for impact dataset](images/IMG_5714.png "image_tooltip")
+![Data processing for impact dataset](images/impact_ds_screenshot.png "image_tooltip")
 <center>(Image 1. Data processing for impact dataset)</center>
 
 Next we have to find a way to connect our 2 datasets. The raw recipes file has an ingredient list for each recipe. The ingredients don’t perfectly match the ingredients from Dataset1. For example, Dataset1 has the ingredient “cheese”. Dataset2 on the other hand has “blue cheese”, “cream cheese”, etc. Instead of creating an explicit mapping between the ingredients of the 2 datasets, we will use TF-IDF score where the selected ingredients from Dataset1 is the query and the ingredient lists for the recipes in Dataset2 are the docs. We will use TF-IDF scores to retrieve the highest scoring recipes to recommend to the user. We use cosine similarity to find similar ingredients or recipes similar to an ingredient list.

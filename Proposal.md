@@ -32,6 +32,7 @@ We have two main datasets.
 1. Ingredient to environmental impact: [https://ourworldindata.org/explorers/food-footprints](https://ourworldindata.org/explorers/food-footprints) 
 2. Recipe to ingredients dataset: [https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=PP_recipes.csv](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=PP_recipes.csv) 
 
+Implementation:
 Firstly, Dataset 1 had 4 separate CSV files for each dimension of environmental impact (greenhouse gas emission, land use, water use, and eutrophication). We merged these 4 files together by row (where each row represents one ingredient) to create 1 CSV file. One quantity we derive from this dataset is a final index of environmental impact which is the sum of all 4 dimensions normalized by the max of that . We will show this quantity via a stacked bar chart.
 
 ![Data processing for impact dataset](images/impact_ds_screenshot.png "image_tooltip")
@@ -48,7 +49,7 @@ Cheese:
 
 
 We also have an additional dataset for some preliminary narrative visualizations: https://www.fao.org/platform-food-loss-waste/flw-data/en/ 
-Pre-processing will include the country, commodities, and the years list from the dataset. 
+Implementaion: Pre-processing will include the country, commodities, and the years list from the dataset. 
 ![Data processing for food loss waste dataset](images/data_processing_narrative.png "image_tooltip")
 <center>(Image 4. Data processing for food loss waste dataset)</center>
 
@@ -57,7 +58,7 @@ Pre-processing will include the country, commodities, and the years list from th
 
 **Narrative**:
 
-We want to introduce the user to the problem of food waste by showing the user how much food their home country wasted since the time they were born. Users will be able to select their country of interest, Year(s) they are interested in, and commodity to see the loss percentage of food for each year for the commodities they are interested. The graphic below will filter baked on the user input to show the percentage of commodities that were lost for each country within the given time period. 
+We want to introduce the user to the problem of food waste by showing the user how much food their home country wasted since the time they were born. For interactivity, users will be able to select their country of interest, Year(s) they are interested in, and commodity to see the loss percentage of food for each year for the commodities they are interested. The graphic below will filter baked on the user input to show the percentage of commodities that were lost for each country within the given time period. 
 
 ![Narrative graph](images/narrative.png "image_tooltip")
 <center>(Image 5. Narrative screen)</center>
@@ -67,12 +68,11 @@ We want to introduce the user to the problem of food waste by showing the user h
 
 The main visualization will have side by side charts. On the left hand side, there will be a stacked bar chart that’s broken down by category of land use, water use, Eutrophication and greenhouse gas emission per ingredient. Each bar will show an Impact Index, which indicates the total amount of environmental impact across all types by a weight factor. On the right hand side, there will be a tree map as shown in the picture below.
 
-When the user click on one or more ingredients on the left chart, the charts on the right will change to be like so, where the right hand side shows the combined metrics for all selected ingredients:
 
 ![alt_text](images/bar_main.png "image_tooltip")
 <center>(Image 6. Main visualization default screen)</center>
 
-When the user click on one or more ingredients on the left chart, the charts on the right will change to be like so, where the right hand side shows the combined metrics for all selected ingredients:
+For interactivity, when the user clicks on one or more ingredients on the left chart, the charts on the right will change to be like so, where the right hand side shows the combined metrics for all selected ingredients:
 
 ![alt_text](images/bar_select.png "image_tooltip")
 <center>(Image 7. Bar select screen)</center>

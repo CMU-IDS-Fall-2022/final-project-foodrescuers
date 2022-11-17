@@ -89,6 +89,13 @@ def stack_chart(df):
     ##################
     #### Tree Map ####
     ##################
+    
+    # TODO: change between single select view and multi select view to update the treemap
+    # Basically linking multi view between the two charts. Selection are already created.
+    # Just need to display the values.
+    # if none select through selection brush, then display default (what's already done)
+    # if select through selection brush entity_selection, then display the selected value(s)
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         # plotly go figure treemap for land
@@ -152,6 +159,4 @@ def stack_chart(df):
         fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
         st.plotly_chart(fig, use_container_width=True)
 
-    # TODO: change between single select view and multi select view to update the treemap
-    # Basically linking multi view between the two charts. Selection are already created.
-    # Just need to display the values
+    

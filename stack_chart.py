@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
 @st.cache
 def get_slice_membership(df, label):
@@ -20,11 +19,16 @@ def get_slice_membership(df, label):
     labels = pd.Series([1] * len(df), index=df.index)
     if label:
         labels &= df['Label'] == label
-    # if entities:
-    #     labels &= df['Entity'].isin(entities)
-    # ... complete this function for the other demographic variables
     return labels
-
+@st.cache
+def get_top_slice(df, entities, maxBarCount):
+    # sort top MAX_BAR item df, but leave spots for selected food items
+    topBars = df.sort_values(by=['impact_idx'], ascending=False).head(maxBarCount -len(entities))
+    # add food select to top10 using concat
+    topBars = pd.concat([topBars, df[df['Entity'].isin(entities)]])
+    # sort by impact index
+    topBars = topBars.sort_values(by=['impact_idx'], ascending=False)
+    return topBars
 #############
 # MAIN CODE #
 #############
@@ -50,34 +54,104 @@ def stack_chart(df):
             max_selections=MAX_BAR
         )
 
-    # sort top MAX_BAR item df, but leave spots for selected food items
-    topBars = df[slice_labels].sort_values(by=['impact_idx'], ascending=False).head(11-len(entities))
-    # add food select to top10
-    topBars = topBars.append(df[slice_labels][df[slice_labels]['Entity'].isin(entities)])
-    # sort by impact index
-    topBars = topBars.sort_values(by=['impact_idx'], ascending=False)
-    stack_chart = alt.Chart(topBars).transform_fold(
-        ["norm_land",
-        "norm_water",
-        "norm_eutro",
-        "norm_emis"
-        ],
-        as_=['column', 'value']
+    topBars = get_top_slice(df[slice_labels], entities, MAX_BAR)
+
+    #### Selection brushes ####
+    # change topBars from wide to long df
+    longTopBars = topBars.melt(id_vars=['Entity', 'impact_idx'], value_vars=['norm_land', 'norm_water', 'norm_eutro', 'norm_emis'], var_name='type', value_name='value')
+    # selection brush for type
+    selection = alt.selection_single(fields=['type'], bind='legend')
+    #selection brush for entity
+    entities_selection = alt.selection_multi(encodings=['y'])
+
+    ######################
+    #### Stack Charts ####
+    ######################
+    stack_chart = alt.Chart(longTopBars
     ).mark_bar().encode(
-        x=alt.X('sum(value):Q'),
+        x=alt.X('value:Q'),
         y=alt.Y('Entity:N', sort='-x'),
-        color='column:N'
+        color='type:N',
+        opacity=alt.condition(entities_selection & selection, alt.value(1), alt.value(0.2))
+    ).add_selection(
+        selection,
+        entities_selection
     )
+    
+    #TODO: rename legend to be name instead of variable name
+    #TODO: Change color of legend to match color of treemap
+
+    # subtitle for instruction
+    st.markdown('Double click on the legend to select the type of impact or select bar(s).')
     st.altair_chart(stack_chart, use_container_width=True)
 
+    
+    ##################
+    #### Tree Map ####
+    ##################
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        # plotly tree map of land using topBars
-        fig = px.treemap(
-            topBars, path=['Entity'],
-            values='Land use per kilogram',
-            hover_data=['Entity', 'Land use per kilogram'])
-
-        fig.update_traces(root_color="lightgrey")
-        fig.update_layout(margin = dict(t=50, l=25, r=25, b=25))
+        # plotly go figure treemap for land
+        fig = go.Figure(go.Treemap(
+            labels=topBars['Entity'],
+            parents=[''] * (len(topBars)+1),
+            values = topBars['Land use per kilogram'],
+            marker_colorscale='ylorbr',
+            ))
+        fig.update_layout(title_text="Land use per kg of food product \
+            <br><sup>Land use measured in in meters squared (m²).</sup>")
+        fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} m²/kg<extra></extra>')
+        # add template to textinfo
+        fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} m²/kg')
+        fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
         st.plotly_chart(fig, use_container_width=True)
+
+    with col2:
+        # plotly go figure treemap for water
+        fig = go.Figure(go.Treemap(
+            labels=topBars['Entity'],
+            parents=[''] * (len(topBars) + 1),
+            values = topBars['Water withdrawals per kilogram'],
+            marker_colorscale='blues',
+            ))
+        fig.update_layout(title_text="Freshwater withdrawals per kg of food product\
+            <br><sup>Water withdrawals measured in liters (L).</sup>")
+        fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} L<extra></extra>')
+        # add template to textinfo 
+        fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} L')
+        fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+        st.plotly_chart(fig, use_container_width=True)
+    with col3:
+        # plotly go figure treemap for eutro
+        fig = go.Figure(go.Treemap(
+            labels=topBars['Entity'],
+            parents=[''] * (len(topBars) + 1),
+            values = topBars['Eutrophication per kilogram'],
+            marker_colorscale='algae',
+            ))
+        fig.update_layout(title_text="Eutrophication emissions per kg of food product\
+            <br><sup>Emissions measured in grams of phosphate equivalents (PO₄eq).</sup>")
+        fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} g<extra></extra>')
+        # add template to textinfo 
+        fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} g')
+        fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+        st.plotly_chart(fig, use_container_width=True)
+    with col4:
+        # plotly go figure treemap for emis
+        fig = go.Figure(go.Treemap(
+            labels=topBars['Entity'],
+            parents=[''] * (len(topBars) + 1),
+            values = topBars['Emissions per kilogram'],
+            marker_colorscale='reds',
+            ))
+        fig.update_layout(title_text="Greenhouse gas emissions per kg of food product\
+            <br><sup>Emissions measured carbon dioxide equivalents (CO2eq).</sup>")
+        fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} kg<extra></extra>')
+        # add template to textinfo 
+        fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kg')
+        fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+        st.plotly_chart(fig, use_container_width=True)
+
+    # TODO: change between single select view and multi select view to update the treemap
+    # Basically linking multi view between the two charts. Selection are already created.
+    # Just need to display the values

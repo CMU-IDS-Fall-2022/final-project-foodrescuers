@@ -13,10 +13,10 @@ def load_data():
         df['Land use per kilogram'] / df['Land use per kilogram'].max() + \
         df['Water withdrawals per kilogram'] / df['Water withdrawals per kilogram'].max() + \
         df['Eutrophication per kilogram'] / df['Eutrophication per kilogram'].max()) * 25
-    df["norm_land"] = df['Land use per kilogram'] / df['Land use per kilogram'].max() * 25
-    df["norm_water"] = df['Water withdrawals per kilogram'] / df['Water withdrawals per kilogram'].max() * 25
-    df["norm_eutro"] = df['Eutrophication per kilogram'] / df['Eutrophication per kilogram'].max() * 25
-    df["norm_emis"] = df['Emissions per kilogram'] / df['Emissions per kilogram'].max() * 25
+    df["Normalized land use"] = df['Land use per kilogram'] / df['Land use per kilogram'].max() #* 25
+    df["Normalized water withdrawals"] = df['Water withdrawals per kilogram'] / df['Water withdrawals per kilogram'].max() #* 25
+    df["Normalized eutro"] = df['Eutrophication per kilogram'] / df['Eutrophication per kilogram'].max() #* 25
+    df["Normalized greenhouse emissions"] = df['Emissions per kilogram'] / df['Emissions per kilogram'].max() #* 25
 
     return df
 @st.cache

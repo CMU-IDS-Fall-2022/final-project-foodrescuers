@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from stqdm import stqdm
 
 from stack_chart import * # implementation file of stack chart
 
@@ -53,4 +56,28 @@ df
 # STACK CHART #
 ###############
 stack_chart(df)
+
+
+def parsein(ings):
+    return ings[1:-1].replace("'","").replace(",","")
+st.title("Loading Recipes. This may take a while......")
+dfr = pd.read_csv("reciperec/RAW_recipes.csv")
+dfr["ingredients_fmt"] = dfr["ingredients"].apply(parsein)
+dfr.ingredients_fmt.values.astype('U')
+st.write("Encoding your data 🤖")
+tfidf = TfidfVectorizer()
+tfidfing = tfidf.fit_transform(dfr["ingredients_fmt"])
+inputing = "prepared pizza crust sausage patty eggs milk salt and pepper cheese"
+inputtfidf = tfidf.transform([inputing])
+out = "Example input: "+inputing
+st.write(out)
+st.write("Finding the best recipe given your ingredients:")
+cos_sim = map(lambda x: cosine_similarity(inputtfidf, x), tfidfing)
+scores = list(stqdm(cos_sim,total=len(dfr["ingredients_fmt"])))
+top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:10]
+
+st.write("Suggested recipes: ")
+for i,t in enumerate(top):
+    st.write(str(i+1)+". "+dfr.iloc[t]["name"])
+
 

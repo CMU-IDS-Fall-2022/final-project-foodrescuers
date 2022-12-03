@@ -3,6 +3,9 @@ import pandas as pd
 import altair as alt
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
+from streamlit_plotly_events import plotly_events
+
 @st.cache
 def get_slice_membership(df, label):
     """
@@ -60,13 +63,68 @@ def stack_chart(df):
     # change topBars from wide to long df
     longTopBars = topBars.melt(id_vars=['Entity', 'impact_idx'], value_vars=['norm_land', 'norm_water', 'norm_eutro', 'norm_emis'], var_name='type', value_name='value')
     # selection brush for type
-    selection = alt.selection_single(fields=['type'], bind='legend')
+    selection = alt.selection_single(fields=['type'], bind='legend', name="type")
     #selection brush for entity
-    entities_selection = alt.selection_multi(encodings=['y'])
+    entities_selection = alt.selection_multi(encodings=['y'], name="entities_selection")
 
     ######################
     #### Stack Charts ####
     ######################
+    # plotly stack chart with longTopBars horizontal
+    # fig = go.Figure()
+    # fig.add_trace(go.Bar(
+    #     y=longTopBars[longTopBars['type'] == 'norm_land']['Entity'],
+    #     x=longTopBars[longTopBars['type'] == 'norm_land']['value'],
+    #     name='Land',
+    #     orientation='h',
+    #     marker_color='rgb(55, 83, 109)'
+    # ))
+    # fig.add_trace(go.Bar(
+    #     y=longTopBars[longTopBars['type'] == 'norm_water']['Entity'],
+    #     x=longTopBars[longTopBars['type'] == 'norm_water']['value'],
+    #     name='Water',
+    #     orientation='h',
+    #     marker_color='rgb(26, 118, 255)'
+    # ))
+    # fig.add_trace(go.Bar(
+    #     y=longTopBars[longTopBars['type'] == 'norm_eutro']['Entity'],
+    #     x=longTopBars[longTopBars['type'] == 'norm_eutro']['value'],
+    #     name='Eutrophication',
+    #     orientation='h',
+    #     marker_color='rgb(255, 65, 54)'
+    # ))
+    # fig.add_trace(go.Bar(
+    #     y=longTopBars[longTopBars['type'] == 'norm_emis']['Entity'],
+    #     x=longTopBars[longTopBars['type'] == 'norm_emis']['value'],
+    #     name='Climate Change',
+    #     orientation='h',
+    #     marker_color='rgb(255, 128, 14)'
+    # ))
+    # fig.update_layout(barmode='stack', title='Impact Index by Food Type', xaxis_title='Impact Index', yaxis_title='Food Type')
+    
+    fig = px.bar(longTopBars, x="value", y="Entity", color="type", orientation='h', title='Impact Index by Food Type', labels={'value':'Impact Index', 'Entity':'Food Type'})
+    
+    fig.update_layout(clickmode="event+select")
+    st.write(fig.data)
+    for figure in fig.data:
+        figure.update(
+            selected=dict(marker=dict(opacity=1.0)),
+            unselected=dict(marker=dict(opacity=0.25)),
+        )
+    # selected_points = plotly_events(fig)
+
+    #update opacity of fig
+    for figure in fig.data:
+        figure.update(
+            selected=dict(marker=dict(opacity=1.0)),
+            unselected=dict(marker=dict(opacity=0.25)),
+        )
+    st.write(fig)
+    # # update clickmode
+    # st.write(selected_points)
+
+
+
     stack_chart = alt.Chart(longTopBars
     ).mark_bar().encode(
         x=alt.X('value:Q'),
@@ -77,6 +135,8 @@ def stack_chart(df):
         selection,
         entities_selection
     )
+
+
     
     #TODO: rename legend to be name instead of variable name
     #TODO: Change color of legend to match color of treemap
@@ -89,6 +149,7 @@ def stack_chart(df):
     ##################
     #### Tree Map ####
     ##################
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         # plotly go figure treemap for land

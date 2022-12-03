@@ -2,3 +2,4 @@ altair
 pandas
 streamlit==1.14.1
 plotly==5.11.0
+streamlit-plotly-events

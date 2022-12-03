@@ -4,8 +4,8 @@ import altair as alt
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-from streamlit_plotly_events import plotly_events
-
+from streamlit_vega_lite import altair_component
+import numpy as np
 @st.cache
 def get_slice_membership(df, label):
     """
@@ -62,10 +62,7 @@ def stack_chart(df):
     #### Selection brushes ####
     # change topBars from wide to long df
     longTopBars = topBars.melt(id_vars=['Entity', 'impact_idx'], value_vars=['norm_land', 'norm_water', 'norm_eutro', 'norm_emis'], var_name='type', value_name='value')
-    # selection brush for type
-    selection = alt.selection_single(fields=['type'], bind='legend', name="type")
-    #selection brush for entity
-    entities_selection = alt.selection_multi(encodings=['y'], name="entities_selection")
+    
 
     ######################
     #### Stack Charts ####
@@ -123,32 +120,42 @@ def stack_chart(df):
     # # update clickmode
     # st.write(selected_points)
 
+    @st.cache
+    def stack_chart():
+        # selection brush for type
+        selection = alt.selection_single(fields=['type'], bind='legend', name="type")
+        #selection brush for entity
+        entities_selection = alt.selection_multi(encodings=['y'], name="entities_selection")
+        
+        return alt.Chart(longTopBars
+            ).mark_bar().encode(
+                x=alt.X('value:Q'),
+                y=alt.Y('Entity:N', sort='-x'),
+                color='type:N',
+                opacity=alt.condition(entities_selection | selection, alt.value(1), alt.value(0.2))
+            ).add_selection(
+                selection,
+                entities_selection
+            ).properties(width=500, title='Impact Index by Food Type')
 
-
-    stack_chart = alt.Chart(longTopBars
-    ).mark_bar().encode(
-        x=alt.X('value:Q'),
-        y=alt.Y('Entity:N', sort='-x'),
-        color='type:N',
-        opacity=alt.condition(entities_selection & selection, alt.value(1), alt.value(0.2))
-    ).add_selection(
-        selection,
-        entities_selection
-    )
-
-
+    chart = stack_chart()
+    
+    event_dict = altair_component(altair_chart=chart)
     
     #TODO: rename legend to be name instead of variable name
     #TODO: Change color of legend to match color of treemap
 
     # subtitle for instruction
     st.markdown('Double click on the legend to select the type of impact or select bar(s).')
-    st.altair_chart(stack_chart, use_container_width=True)
 
     
     ##################
     #### Tree Map ####
     ##################
+    selected_columns = event_dict.get("Entity")
+    if selected_columns:
+        #filter topBars by selected columns
+        topBars = topBars[topBars['Entity'].isin(selected_columns)]
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:

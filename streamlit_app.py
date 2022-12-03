@@ -16,12 +16,15 @@ def load_data():
         df['Land use per kilogram'] / df['Land use per kilogram'].max() + \
         df['Water withdrawals per kilogram'] / df['Water withdrawals per kilogram'].max() + \
         df['Eutrophication per kilogram'] / df['Eutrophication per kilogram'].max()) * 25
-    df["Normalized land use"] = df['Land use per kilogram'] / df['Land use per kilogram'].max() #* 25
-    df["Normalized water withdrawals"] = df['Water withdrawals per kilogram'] / df['Water withdrawals per kilogram'].max() #* 25
-    df["Normalized eutro"] = df['Eutrophication per kilogram'] / df['Eutrophication per kilogram'].max() #* 25
-    df["Normalized greenhouse emissions"] = df['Emissions per kilogram'] / df['Emissions per kilogram'].max() #* 25
+    df["Normalized land use"] = df['Land use per kilogram'] / df['Land use per kilogram'].max() * 25
+    df["Normalized water withdrawals"] = df['Water withdrawals per kilogram'] / df['Water withdrawals per kilogram'].max() * 25
+    df["Normalized eutrophication"] = df['Eutrophication per kilogram'] / df['Eutrophication per kilogram'].max() * 25
+    df["Normalized greenhouse emissions"] = df['Emissions per kilogram'] / df['Emissions per kilogram'].max() * 25
 
     return df
+@st.cache()
+def load_recipes():
+    return pd.read_csv("reciperec/RAW_recipes.csv")
 @st.cache
 def get_slice_membership(df, flabels):
     """
@@ -51,7 +54,7 @@ st.title("Food Rescuers")
 
 with st.spinner(text="Loading data..."):
     df = load_data()
-df
+    dfr = load_recipes()
 ###############
 # STACK CHART #
 ###############
@@ -60,24 +63,25 @@ stack_chart(df)
 
 def parsein(ings):
     return ings[1:-1].replace("'","").replace(",","")
-st.title("Loading Recipes. This may take a while......")
-dfr = pd.read_csv("reciperec/RAW_recipes.csv")
-dfr["ingredients_fmt"] = dfr["ingredients"].apply(parsein)
-dfr.ingredients_fmt.values.astype('U')
-st.write("Encoding your data 🤖")
-tfidf = TfidfVectorizer()
-tfidfing = tfidf.fit_transform(dfr["ingredients_fmt"])
-inputing = "prepared pizza crust sausage patty eggs milk salt and pepper cheese"
-inputtfidf = tfidf.transform([inputing])
-out = "Example input: "+inputing
-st.write(out)
-st.write("Finding the best recipe given your ingredients:")
-cos_sim = map(lambda x: cosine_similarity(inputtfidf, x), tfidfing)
-scores = list(stqdm(cos_sim,total=len(dfr["ingredients_fmt"])))
-top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:10]
 
-st.write("Suggested recipes: ")
-for i,t in enumerate(top):
-    st.write(str(i+1)+". "+dfr.iloc[t]["name"])
+if st.button('Load recipes'):
+    st.title("Loading Recipes. This may take a while......")
+    dfr["ingredients_fmt"] = dfr["ingredients"].apply(parsein)
+    dfr.ingredients_fmt.values.astype('U')
+    st.write("Encoding your data 🤖")
+    tfidf = TfidfVectorizer()
+    tfidfing = tfidf.fit_transform(dfr["ingredients_fmt"])
+    inputing = "prepared pizza crust sausage patty eggs milk salt and pepper cheese"
+    inputtfidf = tfidf.transform([inputing])
+    out = "Example input: "+inputing
+    st.write(out)
+    st.write("Finding the best recipe given your ingredients:")
+    cos_sim = map(lambda x: cosine_similarity(inputtfidf, x), tfidfing)
+    scores = list(stqdm(cos_sim,total=len(dfr["ingredients_fmt"])))
+    top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:10]
+
+    st.write("Suggested recipes: ")
+    for i,t in enumerate(top):
+        st.write(str(i+1)+". "+dfr.iloc[t]["name"])
 
 

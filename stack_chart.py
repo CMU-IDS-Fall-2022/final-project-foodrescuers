@@ -3,6 +3,9 @@ import pandas as pd
 import altair as alt
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
+from streamlit_vega_lite import altair_component
+import numpy as np
 @st.cache
 def get_slice_membership(df, label):
     """
@@ -23,7 +26,10 @@ def get_slice_membership(df, label):
 @st.cache
 def get_top_slice(df, entities, maxBarCount):
     # sort top MAX_BAR item df, but leave spots for selected food items
-    topBars = df.sort_values(by=['impact_idx'], ascending=False).head(maxBarCount -len(entities))
+    topMax = df.sort_values(by=['impact_idx'], ascending=False).head(maxBarCount)
+    # count overlap between topMax and entities
+    overlap = topMax['Entity'].isin(entities)
+    topBars = df.sort_values(by=['impact_idx'], ascending=False).head(maxBarCount -len(entities)+overlap.sum())
     # add food select to top10 using concat
     topBars = pd.concat([topBars, df[df['Entity'].isin(entities)]])
     # sort by impact index
@@ -58,89 +64,116 @@ def stack_chart(df):
 
     #### Selection brushes ####
     # change topBars from wide to long df
-    value_vars = ['Normalized land use', 'Normalized water withdrawals', 'Normalized eutro', 'Normalized greenhouse emissions']
-    longTopBars = topBars.melt(id_vars=['Entity', 'impact_idx'], value_vars=value_vars, var_name='type', value_name='value')
-    # selection brush for type
-    selection = alt.selection_single(fields=['type'], bind='legend')
-    #selection brush for entity
-    entities_selection = alt.selection_multi(encodings=['y'])
-
+    names = ["Normalized water withdrawals","Normalized greenhouse emissions", "Normalized land use", "Normalized eutrophication"]
+    longTopBars = topBars.melt(id_vars=['Entity', 'impact_idx'], value_vars=names, var_name='type', value_name='value')
+    
+    st.markdown('Double click on the legend to select the type of impact or select bar(s).')
     ######################
     #### Stack Charts ####
     ######################
+    @st.cache
+    def stack_chart():
+        # selection brush for type
+        selection = alt.selection_single(fields=['type'], bind='legend', name="type")
+        #selection brush for entity
+        entities_selection = alt.selection_multi(encodings=['y'], name="entities_selection")
+        
+        return alt.Chart(longTopBars
+            ).transform_calculate(
+                order=f"-indexof({names}, datum.Origin)"
+            ).mark_bar().encode(
+                x=alt.X('value:Q'),
+                y=alt.Y('Entity:N', sort='-x'),
+                color=alt.Color('type:N', scale=alt.Scale(domain=names, range=["#1f77b4", "#2ca02c", "#bd9e39",  "#7f7f7f"])),
+                opacity=alt.condition(entities_selection | selection, alt.value(1), alt.value(0.2)),
+                order="order:Q"
+            ).add_selection(
+                selection,
+                entities_selection
+            ).properties(width=500, title='Impact Index by Food Type')
+
+    chart = stack_chart()
+    event_dict = altair_component(altair_chart=chart)
     
-    stack_chart = alt.Chart(longTopBars
-    ).mark_bar().encode(
-        x=alt.X('value:Q'),
-        y=alt.Y('Entity:N', sort='-x'),
-        # color=alt.Color('type:N',
-        #            scale=alt.Scale(
-        #     domain=['Normalized eutro', 'Normalized greenhouse emissions', 'Normalized land use', 'Normalized water withdrawals'],
-        #     range=['pink', 'green', 'orange', 'blue'])),
-        color=alt.Color('type:N', scale=alt.Scale(domain=value_vars, range=["orange", "blue", "pink", "green"])),
-        opacity=alt.condition(entities_selection & selection, alt.value(1), alt.value(0.2)),
-        tooltip='type:N'
-    ).add_selection(
-        selection,
-        entities_selection
-    )
+    #TODO: rename legend to be name instead of variable name
+    #TODO: Change color of legend to match color of treemap
 
     # subtitle for instruction
-    st.markdown("The type of carbon footprint is normalized against the max for that type")
-    st.markdown('Double click on the legend to select the type of impact or select bar(s).')
-    # st.altair_chart(stack_chart, use_container_width=True)
+   
 
     
     ##################
     #### Pie chart ####
     ##################
-
-    domain = list(topBars["Entity"].unique()) #+ list(topBars["Entity"].unique())
-    # scheme = 'category10'
-
-    size = 200
-    land_pie = alt.Chart(topBars, title="Land use (m²) per kilogram").mark_arc().encode(
-        theta='Land use per kilogram:Q',
-        color=alt.Color('Entity:N', scale=alt.Scale(domain=domain, scheme='oranges')),
-        tooltip=['Entity', 'Land use per kilogram:Q']
-    ).transform_filter(
-        entities_selection
-    ).properties(
-        width=size,
-        height=size
-    )
-
-    water_pie = alt.Chart(topBars, title="Water withdrawals (L) per kilogram").mark_arc().encode(
-        theta='Water withdrawals per kilogram:Q',
-        color=alt.Color('Entity:N', scale=alt.Scale(domain=domain, scheme='blues')),
-        tooltip=['Entity', 'Water withdrawals per kilogram:Q']
-    ).transform_filter(
-        entities_selection
-    ).properties(
-        width=size,
-        height=size
-    )
-
-    eutro_pie = alt.Chart(topBars, title="Eutrophication (PO₄eq) per kilogram").mark_arc().encode(
-        theta='Eutrophication per kilogram:Q',
-        color=alt.Color('Entity:N', scale=alt.Scale(domain=domain, scheme='redpurple')),
-        tooltip=['Entity', 'Land use per kilogram:Q']
-    ).transform_filter(
-        entities_selection
-    ).properties(
-        width=size,
-        height=size
-    )
-
-    emis_pie = alt.Chart(topBars, title="Greenhouse gas emissions use (kg) per kilogram").mark_arc().encode(
-        theta='Emissions per kilogram:Q',
-        color=alt.Color('Entity:N', scale=alt.Scale(domain=domain, scheme='greens')),
-        tooltip=['Entity', 'Emissions per kilogram:Q']
-    ).transform_filter(
-        entities_selection
-    ).properties(
-        width=size,
-        height=size
-    )
+    # update based on selected
+    selected_columns = event_dict.get("Entity")
+    if selected_columns:
+        #filter topBars by selected columns
+        topBars = topBars[topBars['Entity'].isin(selected_columns)]
     
-    st.write((stack_chart & (eutro_pie | emis_pie | land_pie | water_pie).resolve_scale(color='independent')).resolve_scale(color='independent'))
+
+    # plotly go figure treemap for land
+    land_fig = go.Figure(go.Treemap(
+        labels=topBars['Entity'],
+        parents=[''] * (len(topBars)+1),
+        values = topBars['Land use per kilogram'],
+        marker_colorscale='ylorbr',
+        ))
+    land_fig.update_layout(title_text="Land use per kg of food product \
+        <br><sup>Land use measured in in meters squared (m²).</sup>")
+    land_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} m²/kg<extra></extra>')
+    # add template to textinfo
+    land_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} m²/kg')
+    land_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+
+    # plotly go figure treemap for water
+    water_fig = go.Figure(go.Treemap(
+        labels=topBars['Entity'],
+        parents=[''] * (len(topBars) + 1),
+        values = topBars['Water withdrawals per kilogram'],
+        marker_colorscale='blues',
+        ))
+    water_fig.update_layout(title_text="Freshwater withdrawals per kg of food product\
+        <br><sup>Water withdrawals measured in liters (L).</sup>")
+    water_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} L<extra></extra>')
+    # add template to textinfo 
+    water_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} L')
+    water_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+
+    # plotly go figure treemap for eutro
+    eutro_fig = go.Figure(go.Treemap(
+        labels=topBars['Entity'],
+        parents=[''] * (len(topBars) + 1),
+        values = topBars['Eutrophication per kilogram'],
+        marker_colorscale='Greys',
+        ))
+    eutro_fig.update_layout(title_text="Eutrophication emissions per kg of food product\
+        <br><sup>Emissions measured in grams of phosphate equivalents (PO₄eq).</sup>")
+    eutro_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} g<extra></extra>')
+    # add template to textinfo 
+    eutro_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} g')
+    eutro_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+
+    # plotly go figure treemap for emis
+    emis_fig = go.Figure(go.Treemap(
+        labels=topBars['Entity'],
+        parents=[''] * (len(topBars) + 1),
+        values = topBars['Emissions per kilogram'],
+        marker_colorscale='algae',
+        ))
+    emis_fig.update_layout(title_text="Greenhouse gas emissions per kg of food product\
+        <br><sup>Emissions measured carbon dioxide equivalents (CO2eq).</sup>")
+    emis_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} kg<extra></extra>')
+    # add template to textinfo 
+    emis_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kg')
+    emis_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.plotly_chart(water_fig, use_container_width=True)
+    with col2:
+        st.plotly_chart(emis_fig, use_container_width=True)
+    with col3:
+        st.plotly_chart(land_fig, use_container_width=True)
+    with col4:
+        st.plotly_chart(eutro_fig, use_container_width=True)

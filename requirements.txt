@@ -4,3 +4,4 @@ streamlit==1.14.1
 plotly==5.11.0
 scikit-learn
 stqdm
+streamlit_vega_lite

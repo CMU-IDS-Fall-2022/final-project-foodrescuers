@@ -39,7 +39,7 @@ def get_top_slice(df, entities, maxBarCount):
 # MAIN CODE #
 #############
 
-def stack_chart(df):
+def stack_chart_frame(df):
     MAX_BAR = 10
     # compute food impact index by normalizing each column
     col1, col2 = st.columns(2)
@@ -50,7 +50,6 @@ def stack_chart(df):
         ('Commodity', 'Specific Food Products'))
 
     slice_labels = get_slice_membership(df, label)
-    st.write("The sliced dataset contains {} elements".format(slice_labels.sum()))
 
     with col1:
         food_select = df[slice_labels]['Entity'].unique()
@@ -100,8 +99,6 @@ def stack_chart(df):
 
     # subtitle for instruction
    
-
-    
     ##################
     #### Pie chart ####
     ##################

@@ -58,7 +58,7 @@ with st.spinner(text="Loading data..."):
 ###############
 # STACK CHART #
 ###############
-stack_chart(df)
+stack_chart_frame(df)
 
 
 def parsein(ings):

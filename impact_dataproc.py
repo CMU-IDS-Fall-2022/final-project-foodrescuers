@@ -48,3 +48,9 @@ specfoodprod["Label"] = "Specific Food Products"
 final = pd.concat([commodity,specfoodprod],ignore_index=True)
 
 final.to_csv("data/Food_Impact.csv")
+
+df1 = pd.read_csv("data/food.csv")
+df2 = pd.read_csv("data/food_portion.csv")
+df3 = df1.merge(df2,on="fdc_id",how="inner")
+df3["description"] = df3["description"].str.lower()
+df3.to_csv("data/foodandgrams.csv")

@@ -5,8 +5,9 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from stqdm import stqdm
-
+import Levenshtein as lev
 from stack_chart import * # implementation file of stack chart
+from impact import impact_calculate
 
 @st.cache()  # add caching so we load the data only once
 def load_data():
@@ -67,17 +68,16 @@ def parsein(ings):
 def parsein2(ings):
     return ings[1:-1].replace("'","").split(",")
 
-def get_grams(row):
-	col2 = str(row["Serving"])
-	start = col2.find("(")
-	end = col2.find(")")
-	return float(col2[start+1:end-2])
+
+def calc_leven(row,ing):
+	col2 = str(row["description"])
+	return lev.distance(col2,ing)
+
+def calc_leven2(row,ing):
+	col2 = str(row["Entity"]).lower()
+	return lev.distance(col2,ing)
 
 
-
-gramdf = pd.read_csv("data/foodcalories.csv")
-gramdf["grams"] = gramdf.apply(get_grams,axis=1)
-gramdf["Food"] = gramdf["Food"].str.lower()
 
 if st.button('Load recipes'):
     st.title("Loading Recipes. This may take a while......")
@@ -97,10 +97,29 @@ if st.button('Load recipes'):
 
     st.write("Suggested recipes: ")
     for i,t in enumerate(top):
+        totalemissions = 0
+        totaleutrophication = 0
+        totallanduse = 0
+        totalwaterscarcity = 0
+        totalwaterwithdrawals = 0
         ingrs = dfr.iloc[t]["ingredients"]
         for ingredient in parsein2(ingrs):
-            print(gramdf.loc[gramdf["Food"]==ingredient,"grams"])
-            print("-----")
+            gramdf = pd.read_csv("data/foodandgrams.csv")
+            grams = gramdf.loc[gramdf.apply(calc_leven,axis=1,ing=ingredient).idxmin()]["gram_weight"]
+            closeingredient = df.loc[df.apply(calc_leven2,axis=1,ing=ingredient).idxmin()]["Entity"]
+            totalemissions += impact_calculate(closeingredient,grams).iloc[0]["Emissions per kilogram"]
+            totaleutrophication += impact_calculate(closeingredient,grams).iloc[0]["Eutrophication per kilogram"]
+            totallanduse += impact_calculate(closeingredient,grams).iloc[0]["Land use per kilogram"]
+            totalwaterscarcity = impact_calculate(closeingredient,grams).iloc[0]["Water scarcity per kilogram"]
+            totalwaterwithdrawals = impact_calculate(closeingredient,grams).iloc[0]["Water withdrawals per kilogram"]
+        st.write(dfr.iloc[t]["name"] +"emissions: "+str(totalemissions)+ "eutrophication: "+str(totaleutrophication) + "landuse: "+str(totallanduse) + "waterscarcity: "+str(totalwaterscarcity)+ "waterwithdrawals: "+str(totalwaterwithdrawals))
+        steps = dfr.iloc[t]["steps"][2:-2].split("', '")
+        all_steps = ""
+        for i,step in enumerate(steps):
+            all_steps += str(i+1)+". "+step + " "
+        st.write(all_steps)
+
+           
 
 
 

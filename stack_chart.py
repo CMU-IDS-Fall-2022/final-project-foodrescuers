@@ -145,7 +145,7 @@ def stack_chart_frame(df):
         <br><sup>Emissions measured in grams of phosphate equivalents (PO₄eq).</sup>")
     eutro_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} g<extra></extra>')
     # add template to textinfo 
-    eutro_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kgPO₄eq')
+    eutro_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} g')
     eutro_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
 
     # plotly go figure treemap for emis
@@ -159,7 +159,7 @@ def stack_chart_frame(df):
         <br><sup>Emissions measured carbon dioxide equivalents (CO2eq).</sup>")
     emis_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} kg<extra></extra>')
     # add template to textinfo 
-    emis_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kgCO2eq')
+    emis_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kg')
     emis_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
 
     col1, col2, col3, col4 = st.columns(4)

@@ -64,6 +64,21 @@ stack_chart_frame(df)
 def parsein(ings):
     return ings[1:-1].replace("'","").replace(",","")
 
+def parsein2(ings):
+    return ings[1:-1].replace("'","").split(",")
+
+def get_grams(row):
+	col2 = str(row["Serving"])
+	start = col2.find("(")
+	end = col2.find(")")
+	return float(col2[start+1:end-2])
+
+
+
+gramdf = pd.read_csv("data/foodcalories.csv")
+gramdf["grams"] = gramdf.apply(get_grams,axis=1)
+gramdf["Food"] = gramdf["Food"].str.lower()
+
 if st.button('Load recipes'):
     st.title("Loading Recipes. This may take a while......")
     dfr["ingredients_fmt"] = dfr["ingredients"].apply(parsein)
@@ -82,6 +97,10 @@ if st.button('Load recipes'):
 
     st.write("Suggested recipes: ")
     for i,t in enumerate(top):
-        st.write(str(i+1)+". "+dfr.iloc[t]["name"])
+        ingrs = dfr.iloc[t]["ingredients"]
+        for ingredient in parsein2(ingrs):
+            print(gramdf.loc[gramdf["Food"]==ingredient,"grams"])
+            print("-----")
+
 
 

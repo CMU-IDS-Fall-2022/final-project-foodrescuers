@@ -5,3 +5,4 @@ plotly==5.11.0
 scikit-learn
 stqdm
 streamlit_vega_lite
+levenshtein

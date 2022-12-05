@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from stqdm import stqdm
 import Levenshtein as lev
+import math
 from stack_chart import * # implementation file of stack chart
 from impact import impact_calculate
 
@@ -159,7 +160,7 @@ if st.button('Find recipes'):
     
     suggested_recipes = get_recipes(gramdf, top, dfr)
     
-    # # cache for testing
+    # #cache for testing
     # suggested_recipes = [{'title': 'calzones', 'totalemissions': 1.6031170937774613, 'totaleutrophication': 6.052143668111411, 'totallanduse': 1.9244491661825236, 'totalwaterscarcity': 2562.8521406654063, 'totalwaterwithdrawals': 124.23803330225903, 'ingredients': 'frozen bread dough,  beef,  mushroom,  pizza sauce,  pizza cheese', 'steps': '1. thaw bread dough\n2. when it is able to be sliced , cut each loaf into 6 sections\n3. place on greased cookie sheet and allow to rise to its capacity\n4. while dough is rising , brown meat and mushrooms\n5. when dough is raised , roll out each section on floured board\n6. place 1 tablespoon meat mixture on half the dough\n7. add pizza sauce and pizza cheese , as much as you like\n8. fold in half and pinch the edges of the dough pieces together\n9. lay on cookie sheet\n10. bake at 300 degrees fahrenheit until done\', "may be baked at a higher temperature , if oven isn\'t too hot", \'bake until bread dough is not doughy on inside\n11. can make vegetable calzones , too\n'}, {'title': 'cheesy pizza macaroni', 'totalemissions': 3.6974012477870457, 'totaleutrophication': 12.717593176671729, 'totallanduse': 5.0933151576428095, 'totalwaterscarcity': 1068.8783898694896, 'totalwaterwithdrawals': 51.4006915607653, 'ingredients': 'lean ground beef,  macaroni and cheese mix,  milk,  pizza sauce,  cheddar cheese,  mozzarella cheese', 'steps': '1. in a large skillet , cook the beef until no longer pink\n2. drain\n3. prepare macaroni and cheese according to package directions , using 1 / 3 cup milk and omitting margarine\n4. spread 1 / 2 the pizza sauce into a 11x7 inch baking dish\n5. layer with half the beef , half the macaroni and cheese and half the cheddar and mozzarella cheeses\n6. repeat layers\n7. bake , uncovered , at 350 degrees for 25-30 minutes or until bubbly\n'}, {'title': 'carmen jackson s swedish eggs rara', 'totalemissions': 0.45456513228531925, 'totaleutrophication': 1.747614754168688, 'totallanduse': 1.0661947793971038, 'totalwaterscarcity': 2373.050568538462, 'totalwaterwithdrawals': 40.394188321846165, 'ingredients': 'eggs,  milk,  butter,  salt and pepper', 'steps': '1. beat the eggs and the milk or cream\n2. over low heat melt the butter in a heavy frying pan\n3. add the eggs\n4. slowly keep scraping the bottom of the pan with a large spoon\', "don\'t walk away", \'when the eggs are creamy just set serve\n'}, {'title': 'cheeseburger pizza', 'totalemissions': 2.165037118536642, 'totaleutrophication': 9.680219216781012, 'totallanduse': 4.000360724297197, 'totalwaterscarcity': 3544.2251299812497, 'totalwaterwithdrawals': 49.5912480724375, 'ingredients': 'ground beef,  onion,  garlic cloves,  salt,  pepper,  pizza crust,  pizza sauce,  cooked bacon,  dill pickle,  mozzarella cheese,  cheddar cheese,  parmesan cheese,  italian seasoning', 'steps': '1. in a skillet , cook beef , onion , garlic , salt , and pepper until meat is browned\n2. drain and set aside\n3. place crust on an ungreased 12-inch pizza pan\n4. spread with pizza sauce\n5. top with beef mixture , bacon , pickles , and cheeses\n6. sprinkle with italian seasoning\n7. bake at 450 degrees for 9-15 minutes or until cheese is melted\n'}, {'title': 'cheese omelette', 'totalemissions': 0.6588981322853192, 'totaleutrophication': 2.8016917541686883, 'totallanduse': 2.057533779397104, 'totalwaterscarcity': 126.53581418635294, 'totalwaterwithdrawals': 5.594092500218692, 'ingredients': 'eggs,  cheese,  salt and pepper,  butter', 'steps': '1. whisk the eggs till light and fluffy\n2. add cheese , salt and pepper\n3. mix well\n4. heat a 7 inch non-stick skillet and add butter\n5. as the butter begins to smoke , lower heat and pour the beaten egg mixture\n6. cook covered for a minute\n7. fold over and serve immediately\n'}]
  
     # create df from suggested_recipes
@@ -245,7 +246,7 @@ if st.button('Find recipes'):
         <br><sup>Emissions measured in grams of phosphate equivalents (PO₄eq).</sup>")
     eutro_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} g<extra></extra>')
     # add template to textinfo 
-    eutro_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} g')
+    eutro_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kgPO₄eq')
     eutro_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
 
     # plotly go figure treemap for emis
@@ -259,7 +260,7 @@ if st.button('Find recipes'):
         <br><sup>Emissions measured carbon dioxide equivalents (CO2eq).</sup>")
     emis_fig.update_traces(hovertemplate='<b>%{label}</b><br>%{value} kg<extra></extra>')
     # add template to textinfo 
-    emis_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kg')
+    emis_fig.update_traces(texttemplate='<b>%{label}</b><br>%{value} kgCO2eq')
     emis_fig.update_layout(margin =dict(t=50, l=25, r=25, b=25))
 
     col1, col2, col3, col4 = st.columns(4)
@@ -280,3 +281,58 @@ if st.button('Find recipes'):
             st.markdown('**Ingredients:** ' + topBars.iloc[i]["ingredients"])
             # st.write(topBars.iloc[i]["ingredients"])
             st.write(topBars.iloc[i]["steps"])
+
+    # Reflection
+    st.header('Check this out!')
+    st.markdown("""
+        <style>
+        .big-font {
+            font-size:22px !important;
+        }
+        </style>
+""", unsafe_allow_html=True)
+    # compute percentage reduce when swap recipe 0 to 4
+    st.markdown(f"""Swapping from recipe ***{topBars.iloc[0]["Recipe"]}*** to recipe ***{topBars.iloc[4]["Recipe"]}*** would reduce """ + \
+            f"""the environmental impact index by <span class="big-font">{round((topBars.iloc[0]["impact_idx"] - topBars.iloc[4]["impact_idx"])/topBars.iloc[0]["impact_idx"]*100, 2)}%<span class="big-font">.""", unsafe_allow_html=True)
+    
+    landsave = (topBars.iloc[0]["totallanduse"] - topBars.iloc[4]["totallanduse"])
+    watersave= (topBars.iloc[0]["totalwaterwithdrawals"] - topBars.iloc[4]["totalwaterwithdrawals"])
+    eutrosave = (topBars.iloc[0]["totaleutrophication"] - topBars.iloc[4]["totaleutrophication"])
+    emissave = (topBars.iloc[0]["totalemissions"] - topBars.iloc[4]["totalemissions"])
+
+    # basketball court dimensions https://en.wikipedia.org/wiki/Basketball_court#:~:text=In%20the%20National%20Basketball%20Association,(91.9%20by%2049.2%20ft).
+    basketball_court = 28 * 15
+    bball_str = f"""🏀 ⛹ This swap helped you protect a land surface equal to **{math.ceil(landsave*365/basketball_court)}** basketball courts!"""
+    st.markdown("##### " + bball_str, unsafe_allow_html=True)
+    # shower use https://home-water-works.org/indoor-use/showers#:~:text=The%20average%20American%20shower%20uses,per%20minute%20(7.9%20lpm).
+    # The average American shower uses approximately 15.8 gallons (59.8 liters) and lasts for 7.8 minutes at an average flow rate of 2.1 gallons per minute (7.9 lpm)
+    shower = 60
+    shower_str = f"""🚿 🛁 This swap helped you save **{math.ceil(watersave*365/shower)}** showers!"""
+    st.markdown("##### " + shower_str, unsafe_allow_html=True)
+
+    # car emissions https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=typical%20passenger%20vehicle%3F-,A%20typical%20passenger%20vehicle%20emits%20about%204.6%20metric%20tons%20of,8%2C887%20grams%20of%20CO2.
+    # 0.404 kg of CO2 per mile
+    # 371 miles between pit and nyc
+    car = 0.404 * 371
+    car_str = f"""🚗 🚙 This swap helped you save **{math.ceil(emissave*365/car)}** car trips between Pittsburgh and NYC!"""
+    st.markdown("##### " + car_str, unsafe_allow_html=True)
+
+    cols = st.columns(4)
+    with cols[0]:
+        st.write(f"""**Water withdrawals:**""")
+        st.subheader(f"""**-{round(watersave/topBars.iloc[0]["totalwaterwithdrawals"]*100, 2)}** %""")
+    with cols[1]:
+        st.write(f"""**Land use:**""")
+        st.subheader(f"""**-{round(landsave/topBars.iloc[0]["totallanduse"]*100, 2)}** %""")
+    with cols[2]:
+        st.write(f"""**Greenhouse gas emissions:**""")
+        st.subheader(f"""**-{round(emissave/topBars.iloc[0]["totalemissions"]*100, 2)}** %""")       
+    with cols[3]:
+        st.write(f"""**Eutrophication:**""")
+        st.subheader(f"""**-{round(eutrosave/topBars.iloc[0]["totaleutrophication"]*100, 2)}** %""")
+
+    st.write(""" *Given that a basketball court is [28m x 15m](https://en.wikipedia.org/wiki/Basketball_court#:~:text=In%20the%20National%20Basketball%20Association,(91.9%20by%2049.2%20ft)),"""+\
+    """ an average American shower is [60L lasts for 7.8 minutes](https://home-water-works.org/indoor-use/showers#:~:text=The%20average%20American%20shower%20uses,per%20minute%20(7.9%20lpm)),"""+\
+     """ and average average passenger vehicle emission is [0.404kg](https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=typical%20passenger%20vehicle%3F-,A%20typical%20passenger%20vehicle%20emits%20about%204.6%20metric%20tons%20of,8%2C887%20grams%20of%20CO2.) of CO2 per mile,"""+\
+     """ distance between PIT and NYC is [371 miles](https://www.google.com/search?q=distance+between+pittsburgh+and+nyc&rlz=1C5CHFA_enUS960US960&oq=distance+between+pittsburgh+and+nyc&aqs=chrome..69i57j0i390l4.13342j0j7&sourceid=chrome&ie=UTF-8), """ +\
+        "and that you make this swap everyday for a year.")

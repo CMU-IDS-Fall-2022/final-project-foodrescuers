@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from streamlit_vega_lite import altair_component
 import numpy as np
-@st.cache
+@st.cache()
 def get_slice_membership(df, label):
     """
     Implement a function that computes which rows of the given dataframe should
@@ -23,7 +23,7 @@ def get_slice_membership(df, label):
     if label:
         labels &= df['Label'] == label
     return labels
-@st.cache
+@st.cache()
 def get_top_slice(df, entities, maxBarCount):
     # sort top MAX_BAR item df, but leave spots for selected food items
     topMax = df.sort_values(by=['impact_idx'], ascending=False).head(maxBarCount)

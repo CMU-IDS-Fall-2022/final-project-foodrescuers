@@ -53,9 +53,20 @@ def get_slice_membership(df, flabels):
     return labels
 
 # data source: https://www.fao.org/platform-food-loss-waste/flw-data/en/
-fao_df_raw = pd.read_csv("data/FAO_data.csv")
+fao_df_raw = pd.read_csv("data/FAO_data.csv", low_memory=False)
 fao_df = fao_df_raw[['year','country','loss_percentage','activity','food_supply_stage','commodity']]
 fao_df = fao_df.sort_values(by = ['year','country'], ascending=True)
+# specify dtypes dictionary for fao_df
+dtypes = {
+    'year': 'int64',
+    'country': 'string',
+    'loss_percentage': 'float64',
+    'activity': 'string',
+    'food_supply_stage': 'string',
+    'commodity': 'string'
+}
+fao_df = fao_df.astype(dtypes)
+fao_df.activity = fao_df.activity.fillna("")
 
 #############
 # MAIN CODE #

@@ -116,16 +116,16 @@ def intro_frame():
     #            data=df_filtered)
     # st.pyplot(fig)
 
-    scatter_chart = alt.Chart(merged_filtered).mark_circle().encode(
+    scatter_chart = alt.Chart(merged_filtered).mark_circle(size=100).encode(
         x='commodity:N',
         y='loss_percentage:Q',
-        tooltip=['year:Q', 'country:N'],
-        color='year:Q'
+        tooltip=['year:Q', 'country:N','loss_percentage:Q'],
+        color='year:N',
     ).transform_filter(
         year_select
     )
 
-    st.write(years_chart & scatter_chart)
+    st.altair_chart((years_chart & scatter_chart).resolve_scale(color='independent'), use_container_width=True)
 
     ####
     # st.write('sns')

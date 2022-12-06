@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import seaborn as sns
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from stqdm import stqdm
@@ -50,6 +53,12 @@ def get_slice_membership(df, flabels):
     #     labels &= df['Entity'].isin(entities)
     # ... complete this function for the other demographic variables
     return labels
+
+# data source: https://www.fao.org/platform-food-loss-waste/flw-data/en/
+fao_df_raw = pd.read_csv("data/FAO_data.csv")
+fao_df = fao_df_raw[['year','country','loss_percentage','activity','food_supply_stage','commodity']]
+fao_df = fao_df.sort_values(by = ['year','country'], ascending=True)
+
 #############
 # MAIN CODE #
 #############
@@ -59,6 +68,64 @@ st.title("Food Rescuers")
 
 with st.spinner(text="Loading data..."):
     df = load_data()
+
+###############
+# INTRO SECTION #
+###############
+
+st.title('Food loss around the world')
+st.write('Food loss has impacted the world in many ways. Select a country and year below to see the impacts of food waste around the world for a given country and time.')
+col1, col2 = st.columns(2)
+
+st.write("---")
+
+with col1:
+
+    # country options and selection
+    country_options = fao_df['country'].unique().tolist()
+    country_options.sort()
+    country_choice = st.multiselect('Which countries are you interested in?', country_options, ['United States of America'])
+    #country_choice = st.sidebar.selectbox('Which countries are you interested in?', country_options, ['United States of America'])
+
+    all_countries = st.checkbox("Select all countries")
+
+    if all_countries:
+        country_choice = fao_df['country']
+
+with col2:
+
+    # year options and selection
+    date_options = fao_df['year'].unique().tolist()
+    date_selected = st.selectbox('What year were you born?', date_options, index=23)
+    df_year_selected = fao_df[fao_df['year'] == date_selected]
+    
+    # filter to year and country selected
+    df_filtered = fao_df[fao_df['year'] >= date_selected]
+    df_filtered = df_filtered[fao_df['country'].isin(country_choice)]
+
+st.write('Based on the Country and Years you were interested:')
+st.dataframe(df_filtered.sort_values('year',
+            ascending=False).reset_index(drop=True))
+
+## HISTOGRAM 
+fig = plt.figure(figsize=(10,4))
+plt.xticks(rotation=60)
+sns.countplot(data=df_filtered, x="year")
+st.write(fig)
+
+# SCATTERPLOT FUNCTIONALITY
+st.write('Scatterplot of food loss per year')
+## scatterplot
+fig, ax = plt.subplots()
+## need to fix to only show integers
+plt.xticks(rotation=60)
+plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+ax.scatter(x='year',
+           y='loss_percentage', 
+           data=df_filtered)
+st.pyplot(fig)
+
+
 ###############
 # STACK CHART #
 ###############

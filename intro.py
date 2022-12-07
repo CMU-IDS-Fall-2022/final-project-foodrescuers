@@ -70,7 +70,7 @@ def intro_frame():
     (fao_df, merged, country_df) = get_data()
     # add a category in the dataframe for bucket
     #map between subregion and region name
-    print(fao_df['commodity'].unique())
+    # print(fao_df['commodity'].unique())
     
     st.write("According to the United States Department of Agriculture (USDA), " +\
         "between **30 - 40** percent of the food supply in the US is wasted. This " +\

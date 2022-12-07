@@ -6,3 +6,5 @@ scikit-learn
 stqdm
 streamlit_vega_lite
 levenshtein
+pycountry_convert
+vega_datasets

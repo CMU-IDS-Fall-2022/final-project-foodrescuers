@@ -1,11 +1,5 @@
-# import json
-# import requests
 import pandas as pd
-# import matplotlib.pyplot as plt
-# import matplotlib.ticker as mticker
-# import seaborn as sns
 import streamlit as st
-# import plotly.express as px
 import altair as alt
 import plotly.graph_objects as go
 import pycountry

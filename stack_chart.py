@@ -59,7 +59,7 @@ def stack_chart_frame(df):
             max_selections=MAX_BAR
         )
 
-    topBars = get_top_slice(df[slice_labels], entities, MAX_BAR)
+    topBars = get_top_slice(df[slice_labels], entities, MAX_BAR).drop_duplicates()
 
     #### Selection brushes ####
     # change topBars from wide to long df
@@ -104,7 +104,6 @@ def stack_chart_frame(df):
     if selected_columns:
         #filter topBars by selected columns
         topBars = topBars[topBars['Entity'].isin(selected_columns)]
-    
 
     # plotly go figure treemap for land
     land_fig = go.Figure(go.Treemap(

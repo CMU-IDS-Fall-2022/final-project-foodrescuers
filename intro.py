@@ -127,6 +127,10 @@ def intro_frame():
 
     st.altair_chart((years_chart & scatter_chart).resolve_scale(color='independent'), use_container_width=True)
 
+    # worst loss for a given year selected
+    #st.write(max(merged_filtered.worst_loss))
+
+    
     ####
     # st.write('sns')
 

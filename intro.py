@@ -7,6 +7,7 @@ import pandas as pd
 import streamlit as st
 # import plotly.express as px
 import altair as alt
+import pycountry_convert as pc
 
 
 # source: https://www.fao.org/platform-food-loss-waste/flw-data/en/
@@ -18,7 +19,7 @@ def get_data():
     fao_df = fao_df_raw[['year','country','loss_percentage','food_supply_stage','commodity']]
     fao_df = fao_df.sort_values(by = ['year','country'], ascending=True)
 
-    #there are duplicates for some reason ... keep max
+    # there are duplicates for some reason ... keep max
     fao_df['loss_percentage'] = fao_df.groupby(['year', 'country', 'commodity'])['loss_percentage'].transform(max)
     fao_df.drop_duplicates(inplace=True)
 
@@ -31,15 +32,18 @@ def get_data():
     worst_commodity = (fao_df[fao_df['loss_percentage']==fao_df['worst_loss']])[['year', 'country', 'commodity']]
     worst_commodity.rename(columns={'commodity': 'worst_commodity'}, inplace=True)
 
-    #merges
+    # merges
     merged = count.merge(worst_commodity, on=['year', 'country'])
     merged = fao_df.merge(merged, on=['year', 'country'], how='left')
 
-    return (fao_df, merged)
+    # get country information 
+    country = pd.Series.to_frame(fao_df.groupby(['country'])['loss_percentage'].agg('sum'))
+
+    return (fao_df, merged, country)
 
 def intro_frame():
 
-    (fao_df, merged) = get_data()
+    (fao_df, merged, country) = get_data()
 
     st.title('Food loss based on your selections')
     st.write('Food loss has impacted the world in many ways. Select a country and year below to see the impacts of food waste around the world for a given country and time.')

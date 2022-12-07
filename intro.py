@@ -15,11 +15,18 @@ import pycountry_convert as pc
 
 @st.cache()
 def get_data():
-    fao_df_raw = pd.read_csv("data/FAO_data.csv")
+    fao_df_raw = pd.read_csv("data/FAO_data.csv", low_memory=False)
     fao_df = fao_df_raw[['year','country','loss_percentage','food_supply_stage','commodity']]
     fao_df = fao_df.sort_values(by = ['year','country'], ascending=True)
-
-    # there are duplicates for some reason ... keep max
+    dtypes = {
+    'year': 'int64',
+    'country': 'string',
+    'loss_percentage': 'float64',
+    'food_supply_stage': 'string',
+    'commodity': 'string'
+    }
+    fao_df = fao_df.astype(dtypes)
+    #there are duplicates for some reason ... keep max
     fao_df['loss_percentage'] = fao_df.groupby(['year', 'country', 'commodity'])['loss_percentage'].transform(max)
     fao_df.drop_duplicates(inplace=True)
 
@@ -45,12 +52,21 @@ def intro_frame():
 
     (fao_df, merged, country) = get_data()
 
-    st.title('Food loss based on your selections')
-    st.write('Food loss has impacted the world in many ways. Select a country and year below to see the impacts of food waste around the world for a given country and time.')
+    st.write("According to the United States Department of Agriculture (USDA), " +\
+        "between **30 - 40** percent of the food supply in the US is wasted. This " +\
+        "corresponds to about **133 billion** pounds and **\$161 billion** worth of food" +\
+        " in 2010. This is not just a problem in the United States; one-third of" +\
+        " food produced for human consumption is lost or wasted globally. This "+\
+        "amounts to 1.3 billion tons annually, worth approximately $1 trillion. If"+\
+        " wasted food were a country, it would be the world's third-largest producer of carbon dioxide, after the USA and China ")
+    st.write("Not convinced? Checkout...")
+    st.title('Food loss percentage based on your selections')
+    st.write('Select a country and year below to see the impacts of food waste around the world for a given country and time.')
 
-    st.markdown('Adjust the year to get a different window of time')
-    st.markdown('Hover over each bar to get information about the commodity with the most loss for that country and year.')
-    st.markdown('Select one or more bars to filter by year and interact with the scatterplot below')
+    st.markdown('Adjust the year to get a different window of time. Hover over each bar to get information'+\
+        ' about the commodity with the most loss for that country and year. Select one or more bars to'+\
+        ' filter by year and interact with the scatterplot below')
+
 
     col1, col2 = st.columns(2)
 
@@ -73,9 +89,10 @@ def intro_frame():
 
         # year options and selection
         date_options = fao_df['year'].unique().tolist()
-        date_selected = st.selectbox('What year are you interested in?', date_options, index=0)
+        # cut options down to be values between 1970 and 2015
+        date_options = [x for x in date_options if x <= 2015 and x >= 1970]
+        date_selected = st.slider('What year are you interested in?', min_value=1970, max_value=2015, value=1990)
 
-        
     # filtering based on user input code
     #made a date range for visbility purposes
     date_range = []

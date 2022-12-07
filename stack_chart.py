@@ -40,6 +40,10 @@ def get_top_slice(df, entities, maxBarCount):
 #############
 
 def stack_chart_frame(df):
+    st.title("Explore the Environmental Impact of each Food Product")
+    st.write("Now that we saw how much food is wasted, let's look at the environmental impact of food products"+\
+        " to see how the food waste negatively impacts the environment in each category of land use, water withdrawals, "+\
+        "greenhouse emissions, and eutrophication.")
     MAX_BAR = 10
     # compute food impact index by normalizing each column
     col1, col2 = st.columns(2)

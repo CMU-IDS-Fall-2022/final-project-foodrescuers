@@ -69,7 +69,7 @@ def intro_frame():
 
         # year options and selection
         date_options = fao_df['year'].unique().tolist()
-        date_selected = st.selectbox('What year were you born?', date_options, index=23)
+        date_selected = st.selectbox('What year are you interested in?', date_options, index=0)
 
         
     # filtering based on user input code

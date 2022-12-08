@@ -215,8 +215,10 @@ def intro_frame():
         ).project('equirectangular')
         
         
+        max_loss_avg = max(country_df["loss_average"])
+
         countries_chart = alt.Chart(countries).mark_geoshape().encode(
-            color='loss_average:Q',
+            color=alt.Color('loss_average:Q', scale=alt.Scale(domain=(0, max_loss_avg))),
             tooltip=['country:N', 'loss_average:Q']
         ).transform_lookup(
             lookup='id',

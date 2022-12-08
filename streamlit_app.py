@@ -181,6 +181,7 @@ def get_recipes(gramdf, top, dfr):
         suggested_recipes.append(recipe_impact)
     return suggested_recipes
 
+st.cache()
 def compute(dfr, inputing):
     tfidf = TfidfVectorizer()
     tfidfing = tfidf.fit_transform(dfr["ingredients_fmt"])
@@ -351,34 +352,48 @@ if st.button('Find recipes'):
 
     # basketball court dimensions https://en.wikipedia.org/wiki/Basketball_court#:~:text=In%20the%20National%20Basketball%20Association,(91.9%20by%2049.2%20ft).
     basketball_court = 28 * 15
-    bball_str = f"""🏀 ⛹ This swap helped you protect a land surface equal to **{math.ceil(landsave*365/basketball_court)}** basketball courts!"""
+    bbal_save = math.ceil(landsave*365/basketball_court)
+    
+    bball_str = f"""🏀 ⛹ This swap {"helped you protect" if bbal_save > 0 else "costs"} a land surface equal to **{abs(bbal_save)}** basketball courts!"""
     st.markdown("##### " + bball_str, unsafe_allow_html=True)
     # shower use https://home-water-works.org/indoor-use/showers#:~:text=The%20average%20American%20shower%20uses,per%20minute%20(7.9%20lpm).
     # The average American shower uses approximately 15.8 gallons (59.8 liters) and lasts for 7.8 minutes at an average flow rate of 2.1 gallons per minute (7.9 lpm)
     shower = 60
-    shower_str = f"""🚿 🛁 This swap helped you save **{math.ceil(watersave*365/shower)}** showers!"""
+    shower_save = math.ceil(watersave*365/shower)
+    shower_str = f"""🚿 🛁 This swap {"helped you save" if shower_save > 0 else "costs"} **{abs(shower_save)}** showers!"""
     st.markdown("##### " + shower_str, unsafe_allow_html=True)
 
     # car emissions https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle#:~:text=typical%20passenger%20vehicle%3F-,A%20typical%20passenger%20vehicle%20emits%20about%204.6%20metric%20tons%20of,8%2C887%20grams%20of%20CO2.
     # 0.404 kg of CO2 per mile
     # 371 miles between pit and nyc
     car = 0.404 * 371
-    car_str = f"""🚗 🚙 This swap helped you save **{math.ceil(emissave*365/car)}** car trips between Pittsburgh and NYC!"""
+    car_save = math.ceil(emissave*365/car)
+    car_str = f"""🚗 🚙 This swap {"helped you save" if car_save > 0 else "costs"} **{abs(car_save)}** car trips between Pittsburgh and NYC!"""
+
     st.markdown("##### " + car_str, unsafe_allow_html=True)
+
+    land_percent_save = -1*round(landsave/topBars.iloc[0]["totallanduse"]*100, 2)
+    water_percent_save = -1*round(watersave/topBars.iloc[0]["totalwaterwithdrawals"]*100, 2)
+    eutro_percent_save = -1*round(eutrosave/topBars.iloc[0]["totaleutrophication"]*100, 2)
+    emis_percent_save = -1*round(emissave/topBars.iloc[0]["totalemissions"]*100, 2)
+    prefix_land = "+" if land_percent_save > 0 else ""
+    prefix_water = "+" if water_percent_save > 0 else ""
+    prefix_eutro = "+" if eutro_percent_save > 0 else ""
+    prefix_emis = "+" if emis_percent_save > 0 else ""
 
     cols = st.columns(4)
     with cols[0]:
         st.write(f"""**Water withdrawals:**""")
-        st.subheader(f"""**-{round(watersave/topBars.iloc[0]["totalwaterwithdrawals"]*100, 2)}** %""")
+        st.subheader(f"""**{prefix_water}{water_percent_save}** %""")
     with cols[1]:
         st.write(f"""**Land use:**""")
-        st.subheader(f"""**-{round(landsave/topBars.iloc[0]["totallanduse"]*100, 2)}** %""")
+        st.subheader(f"""**{prefix_land}{land_percent_save}** %""")
     with cols[2]:
         st.write(f"""**Greenhouse gas emissions:**""")
-        st.subheader(f"""**-{round(emissave/topBars.iloc[0]["totalemissions"]*100, 2)}** %""")       
+        st.subheader(f"""**{prefix_emis}{emis_percent_save}** %""")       
     with cols[3]:
         st.write(f"""**Eutrophication:**""")
-        st.subheader(f"""**-{round(eutrosave/topBars.iloc[0]["totaleutrophication"]*100, 2)}** %""")
+        st.subheader(f"""**{prefix_eutro}{eutro_percent_save}** %""")
 
     st.write(""" *Given that a basketball court is [28m x 15m](https://en.wikipedia.org/wiki/Basketball_court#:~:text=In%20the%20National%20Basketball%20Association,(91.9%20by%2049.2%20ft)),"""+\
     """ an average American shower is [60L lasts for 7.8 minutes](https://home-water-works.org/indoor-use/showers#:~:text=The%20average%20American%20shower%20uses,per%20minute%20(7.9%20lpm)),"""+\

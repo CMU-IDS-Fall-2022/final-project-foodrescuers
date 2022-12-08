@@ -135,7 +135,7 @@ def intro_frame():
         date_options = fao_df['year'].unique().tolist()
         # cut options down to be values between 1970 and 2015
         date_options = [x for x in date_options if x <= 2015 and x >= 1970]
-        date_selected = st.slider('What year are you interested in?', min_value=1970, max_value=2015, value=1990)
+        date_selected = st.slider('What year are you interested in?', min_value=1970, max_value=2015, value=1996)
 
 
     col1b, col2b = st.columns(2)

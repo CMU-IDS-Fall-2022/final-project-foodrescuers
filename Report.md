@@ -1,6 +1,7 @@
 # Final Project Report
 
-**Project URL**: TODO
+**Project URL**: https://cmu-ids-fall-2022-final-project-foodrescue-streamlit-app-ung2fe.streamlit.app/
+**Github URL**: https://github.com/CMU-IDS-Fall-2022/final-project-foodrescuers/
 **Video URL**: TODO
 
 Short (~250 words) abstract of the concrete data science problem and how the solutions addresses the problem.

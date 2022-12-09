@@ -1,16 +1,33 @@
 # CMU Interactive Data Science Final Project
 
-* **Online URL**: TODO
+Title: 
+## Food Rescuers: How you can make an impact
+
+* **Online URL**: https://cmu-ids-fall-2022-final-project-foodrescue-streamlit-app-ung2fe.streamlit.app/
 * **Team members**:
   * dmalpure@andrew.cmu.edu
   * asiedahm@andrew.cmu.edu
   * mvanbure@andrew.cmu.edu
   * nnishika@andrew.cmu.edu
   * utran@andrew.cmu.edu
+  
+## Abstract
+TODO
+
+## Summary Image
+TODO
 
 ## Work distribution
 
-Update towards the end of the project.
+We distributed the work evenly and
+
+Michael mainly worked on the introduction section.
+Neha mainly worked on the global visualization section.
+Jullia mainly worked on the treemap visualization section.
+Durvesh and Abubakir mainly worked on the ML predictor.
+
+However, we all helped each other with tasks and wrote the report together.
+
 
 ## Deliverables
 

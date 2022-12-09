@@ -77,7 +77,7 @@ Additionally, another important aspect of the recipe recommendation and impact c
 
 In our introduction, we motivate and contextualize our problem. The United States specifically has a lot of data within the FAO dataset and most of our audience is from the United States, thus we chose to highlight it in our first visualization. We wanted the introductory visualization to be personalized to the user, thus we ask the user to input the year they were born. The bar chart on the right then renders to get the Top 10 “worst” commodities, i.e the commodities with the worst loss in the U.S for that year. The user can also mouse over the bars to show tooltips of the commodity and the loss percentage. The number one worst commodity is highlighted below.
 
-![Fig1](images/image1.png "Fig 10")
+![Fig1](images/image10.png "Fig 1")
 
 We then pivot to a bigger picture view and show food loss across the globe. On the top, the user can select as many countries as they’re curious about and a year between 1970 and 2015. The bar chart on the left will then render a window of time of a decade with the selected date in the middle to show the number of lossy commodities for a given year aggregated across the selected countries. Interestingly, hovering over a bar shows a tooltip feature for the worst commodity for the given year and selected countries. The scatter plot below the bar chart also renders, but instead of showing the number of commodities, plots exact commodities against their respective loss. By hovering over a dot, the tooltip shows the country, year, and exact loss percentage. The user can also select bars on the bar chart to accordingly filter the scatter plot. 
 

@@ -55,7 +55,7 @@ To contextualize the food impact of the recipes, we provided the user some metri
 
 To visualize the impact of the ingredients, we use multi-view coordination between the stacked bar chart and a treemap. This multi-view is between the Plotly treemap component and the Altair stacked bar chart component. Because of the differences in library, multi-view capability needed an additional plug in for it to work since Altair brush selection is purely a front-end event. The plug in captures the select event of the user and equates that to the data the user selected. The selected data is passed out as a click event dictionary from the Altair chart. This event dictionary is then used to filter the dataset with the user inputs and be fed into the Plotly treemap. The stacked bar chart shows the aggregate impact of a food ingredient, broken down by the category of impact. This stacked bar chart is a multi-select bar chart, where there are color highlights for the selected bar. When the bars are selected, the tree map would adjust to show the impact value of the selected commodities and be displayed. This way the user can easily compare between commodities both the aggregate impact, and within each impact category.
 
-*ML:*
+**ML:**
 
 We used one of the datasets that can be found in the Data Explorer: Environmental Impacts of Food as one of our sources. After downloading the data, we were presented with six datasets. These datasets were later combined into one dataset and used as the basis for the main impact visualization that was developed using that dataset. Unfortunately, we could not use this dataset to calculate grams. We searched the internet for a dataset in which grams could be calculated, but most of the datasets we found did not include any columns for fruits or measurements. A number of datasets also had a very small number of fruit entries in their fruit column, and this was a serious problem. Having scoured the internet for quite a while to find the right data, we finally decided to combine two datasets: food and food_portion, in order to achieve our goal. It is important to note that the first dataset had ample amounts of fruit values, whereas the second dataset had measurements of fruits. The inner join was used to join the datasets based on their ID column, and following this, we had to do several data cleaning such as removing duplicates and missing values from the dataset. It was this process that enabled us to produce a useful dataset which allowed us to calculate the gram.
 
@@ -74,7 +74,7 @@ Additionally, another important aspect of the recipe recommendation and impact c
 
 ## Results
 
-*Introduction:*
+**Introduction:**
 
 In our introduction, we motivate and contextualize our problem. The United States specifically has a lot of data within the FAO dataset and most of our audience is from the United States, thus we chose to highlight it in our first visualization. We wanted the introductory visualization to be personalized to the user, thus we ask the user to input the year they were born. The bar chart on the right then renders to get the Top 10 “worst” commodities, i.e the commodities with the worst loss in the U.S for that year. The user can also mouse over the bars to show tooltips of the commodity and the loss percentage. The number one worst commodity is highlighted below.
 
@@ -87,7 +87,7 @@ Our third graph in this visualization shows a choropleth global map of the avera
 ![Fig2](images/image2.png "Fig 2")
 ![Fig2b](images/image5.png "Fig 2b")
 
-EDA:
+**EDA:**
 
 Our decision to use treemaps was inspired from the A Study on the Effectiveness of Tree-Maps as Tree Visualization Techniques paper where the researchers recruited participants to compare four types of treemaps. Their findings compelled us to use treemaps to visualize our data because of their ability to illustrate the analysis of a large hierarchical structure in an extremely clear and concise manner. A treemap is presented in the form of a rectangle to represent each node, and for those nodes that have child nodes, these rectangles are divided into smaller rectangles in order to represent those child nodes. A good reason to have this capability is so that there will be less information on one node, and the user will not be overwhelmed by too much information available to them. We chose the original treemap to visualize our data because although there are many types of treemaps, such as circular treemaps, cushion treemaps, and 3D treemaps, it is a very appealing form of displaying hierarchical information compared to other types of treemaps. Furthermore, by using a variety of colors and sizes of rectangles, it is possible to help the viewer differentiate the importance of different values. Due to the fact that circular treemaps use circles instead of rectangles, we decided against using them. We also decided not to use the 3D tree-map option because we didn't want to visualize our data in a 3D layout but rather in 2D.
 
@@ -103,7 +103,7 @@ We want users to be motivated to stop food waste. Thus we project some metrics t
 
 ![Fig4](images/image8.png "Fig 4")
 
-*ML*:
+**ML**:
 The last section of our app encourages users to be an active part of the solution. They can input their ingredients and the TF-IDF model outputs the top 5 recipes in detail for those ingredients along with their environmental impacts. Lastly, we show another metric-driven visualization to highlight the differences between the most and least lossy recipes from the top 5. 
 
 Users may enter five ingredients present in their refrigerator in the textbox and click on the Find recipes button to generate recipes that contain those ingredients. After this has been done you will be able to see a horizontal stacked bar chart showing their 5 ingredients. As with the horizontal stacked bar chart described in the above section, this stacked bar chart will serve the same purpose by displaying the impact index by food type. To aid the user in being able to understand the impact of the food type, a treemap has also been added.
@@ -120,11 +120,11 @@ As an added feature, we also provide the user with a way to view how much enviro
 
 ## Discussion
 
-*Introduction:*
+**Introduction:**
 
 Through the choropleth map, the user can see how their country compares to the average across the past few decades. One unsurprising observation is the increase in data as the years become more recent. For example, in 1990, only three countries had food loss data. This is comparable for the years prior as well. On the other hand, in 2015, there are a few dozen countries with data and the choropleth map is thus more insightful. Another observation from this map is that the United States’ food loss was generally consistent from 2000-2015, with a slight gradual increase. This trend isn’t surprising and should and can motivate us to make a difference to stop the rise of food waste.
 
-*EDA:*
+**EDA:**
 
 As discussed in the Results section, the stack bar chart gives the user insights to the top ten commodities that have the highest impact index.  Some insights the user gains from the stack bar chart is that big mammals like cows and lamb are at the top of this chart, followed by their products such as cheese and dairy products from cows. Following this category are prawns and fish. This pattern is important to make note, as it’s a set up for the insights discussed below.
 
@@ -138,7 +138,7 @@ Furthermore, when the user selects multiple charts, they will see insights about
 
 ![Fig10](images/image11.png "Fig 10")
 
-*ML:*
+**ML:**
 
 Similar to the commodity section, the recipes section also allows the user to notice some trends and compare the impact between different recipes. The user can gain insights on which recipe consumes the highest impact overall or per category. With these insights, for example, the user with ingredients in their fridge to make these 5 recipes might choose to make cheesy pizza macaroni since it’s the one that has the most environmental impact. This is because the ingredients in this high impact recipe if not used would contribute to food waste, which since this recipe has the highest impact index would mean that it’s the most detrimental to the environment. However for future grocery trips, the user can maybe think about choosing a less environmental impact recipe like cheese omelet. The list of ingredients for each recipe is listed in our app, which will make their shopping trips easier and more informative.
 
@@ -150,7 +150,7 @@ Furthermore, insights between recipe swaps are also provided and are contextuali
 
 ## Future Work
 
-*Introduction:*
+**Introduction:**
 
 Future work that could be done to expand the Introduction section would include adding additional data points. It is evident the bulk of data is in developed countries. It would be beneficial to expand the study by funding research in developing countries. Additionally, there are challenges quantifying food loss from households who dispose of food that was not consumed because it spoiled. It would be beneficial to conduct studies to ensure estimates across household waste is as accurately as possible. 
 
@@ -158,11 +158,11 @@ The biggest gap today is the need to be published more broadly. Currently, every
 
 This project is just the start of an outreach program that could spread awareness of food waste around the world and what everyday consumers, and businesses, could do to reduce their part. 
 	
-*EDA:*
+**EDA:**
 
 Future works of the insights sections, besides providing the insights of food ingredients and the recipe swap, we could also provide insights of being able to switch specific ingredients out from a recipe and seeing the insights of saving from this switch. This way, the user can know if they switch from a specific ingredient to another in a recipe that our site recommended, they can find out about the environmental impact for this action.
 
-*ML:*
+**ML:**
 
 Future work for prediction could be to also allow the user to input how much of each ingredient they have to account for measurements. Currently, our model doesn’t take into account the spelling mistakes that could be commonly caused by a user. We also only map the ingredients using a TFIDF encoding and its cosine similarity with the other recipes’ ingredients. This could be done in a better way with more compute available using deep learning models to parse the ingredients provided by users.
 

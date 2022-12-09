@@ -16,6 +16,21 @@ TODO
 ## Summary Image
 ![Summary Image](images/image3.png "Summary Image")
 
+
+## Paper link
+TODO
+
+## Video link
+TODO
+
+## Commentary
+
+We aimed for a narrative-driven approach for our project and focused on visualizations that would either convince the user that food waste is a real problem and/or motivate the user to do something about it. For example, our introductory visualizations are focused on the United States (our main audience) and other on user-selections. That level of personalization helps the user contextualize the problem.
+
+We faced a few issues and learned a lot from solving them. For example, as detailed in our report, we had to make assumptions about portion sizes to calculate conrete numbers for our visualizations. 
+
+Overall, we really enjoyed using what we've learned in this class to create a cohesive project.
+
 ## Work distribution
 
 We distributed the work evenly and
@@ -27,6 +42,8 @@ Durvesh and Abubakir mainly worked on the ML predictor.
 
 However, we all helped each other with tasks and wrote the report together.
 
+## Instructions to run locally
+Simply download requirements and run.
 
 ## Deliverables
 

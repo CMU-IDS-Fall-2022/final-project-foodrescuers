@@ -15,7 +15,7 @@ Title:
 TODO
 
 ## Summary Image
-TODO
+![Summary Image](images/image3.png "Summary Image")
 
 ## Work distribution
 

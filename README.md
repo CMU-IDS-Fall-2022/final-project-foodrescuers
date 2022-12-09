@@ -27,7 +27,7 @@ A theme in our app is to use impactful visualizations and personalized metrics t
 [Final paper/report](Report.md)
 
 ## Video link
-[Final video](Final Video.mp4)
+[Final video](FinalVideo.mp4)
 
 ## Commentary
 

@@ -1,7 +1,6 @@
 # CMU Interactive Data Science Final Project
 
-Title: 
-## Food Rescuers: How you can make an impact
+## Title: Food Rescuers - How you can make an impact on food waste
 
 * **Online URL**: https://cmu-ids-fall-2022-final-project-foodrescue-streamlit-app-ung2fe.streamlit.app/
 * **Team members**:

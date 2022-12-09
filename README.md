@@ -35,7 +35,7 @@ Overall, we really enjoyed using what we've learned in this class to create a co
 
 We distributed the work evenly and
 
-Michael mainly worked on the introduction section.
+Michael mainly worked on the USA visualization section.
 Neha mainly worked on the global visualization section.
 Jullia mainly worked on the treemap visualization section.
 Durvesh and Abubakir mainly worked on the ML predictor.

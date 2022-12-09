@@ -168,4 +168,18 @@ Future work for prediction could be to also allow the user to input how much of 
 Further,  we could make the interface more intuitive by offering natural language input, instead of a structured input. For example, a user could input “I have three eggs and red bell peppers” instead of input “eggs peppers”. This would allow for more expressive inputs and an easier interface for the user. To parse this, we would need a more sophisticated NLP model to parse and understand the natural language input.
 
 
+## Citations
+How we fight food waste in the US. Feeding America. (n.d.). Retrieved October 31, 2022, from https://www.feedingamerica.org/our-work/our-approach/reduce-food-waste
+
+“5 Facts about Food Waste and Hunger | World Food Programme.” Wfp.org, 2 June 2020, www.wfp.org/stories/5-facts-about-food-waste-and-hunger. Accessed 1 Nov. 2022.
+
+“Food Loss and Waste Database | Technical Platform on the Measurement and Reduction of Food Loss and Waste | Food and Agriculture Organization of the United Nations.” FoodLossWaste, 2014, www.fao.org/platform-food-loss-waste/flw-data/en/ 
+
+“Data Explorer: Environmental Impacts of Food.” Our World in Data, Global Change Data Lab, 2018, https://ourworldindata.org/explorers/food-footprints. 
+
+FoodData Central Data by U.S. Department of Agriculture on October 2021
+https://fdc.nal.usda.gov/download-datasets.html
+
+Food.com recipes and interactions on kaggle
+https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=RAW_recipes.csv
 

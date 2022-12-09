@@ -4,7 +4,12 @@
 **Github URL**: https://github.com/CMU-IDS-Fall-2022/final-project-foodrescuers/ \
 **Video URL**: TODO
 
-Short (~250 words) abstract of the concrete data science problem and how the solutions addresses the problem.
+According to the United States Department of Agriculture (USDA), between 30 - 40 percent of the food supply in the US is wasted. This corresponds to about 133 billion pounds and $161 billion worth of food in 2010. This is not just a problem in the United States; one-third of food produced for human consumption is lost or wasted globally.
+
+Our app has three main sections. In the first, we offer data exploration of food waste both in the United States and globally via multiple expressive visualizations for. In the second, we offer more detail and break down the environmental impact of many popular food items globally via multiple different metrics: land use, water withdrawal, eutrophication, and greenhouse gas emissions. Finally, in the third, we enable our user to make a difference by helping users come up with a recipe to make with the food they already have in their fridge. We train and deploy a model that takes user input and predicts what recipes they should make.
+
+A theme in our app is to use impactful visualizations and personalized metrics to convince the user of the large scale and importance of the problem of global food waste
+
 
 ## Introduction
 1.3 billion tons of food is wasted annually, worth approximately $1 trillion. Food waste occurs for a variety of reasons, including: uneaten food that is thrown out at homes and restaurants, crops left in fields because of low crop prices or too many of the same crops being available, problems during the manufacturing and transportation of food, and food not meeting retailers' standards for color and appearance (How we fight food waste in the US. Feeding America). 

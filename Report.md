@@ -77,13 +77,14 @@ Additionally, another important aspect of the recipe recommendation and impact c
 
 In our introduction, we motivate and contextualize our problem. The United States specifically has a lot of data within the FAO dataset and most of our audience is from the United States, thus we chose to highlight it in our first visualization. We wanted the introductory visualization to be personalized to the user, thus we ask the user to input the year they were born. The bar chart on the right then renders to get the Top 10 “worst” commodities, i.e the commodities with the worst loss in the U.S for that year. The user can also mouse over the bars to show tooltips of the commodity and the loss percentage. The number one worst commodity is highlighted below.
 
-(insert viz1)
+![Fig1](images/image1.png "Fig 1")
 
 We then pivot to a bigger picture view and show food loss across the globe. On the top, the user can select as many countries as they’re curious about and a year between 1970 and 2015. The bar chart on the left will then render a window of time of a decade with the selected date in the middle to show the number of lossy commodities for a given year aggregated across the selected countries. Interestingly, hovering over a bar shows a tooltip feature for the worst commodity for the given year and selected countries. The scatter plot below the bar chart also renders, but instead of showing the number of commodities, plots exact commodities against their respective loss. By hovering over a dot, the tooltip shows the country, year, and exact loss percentage. The user can also select bars on the bar chart to accordingly filter the scatter plot. 
 
 Our third graph in this visualization shows a choropleth global map of the average loss percentage across all commodities for a given country and selected year. We chose to balance the interactive bar and scatter plots with the choropleth to help contextualize and make our visualizations more concrete.
 
-(insert viz 2 and 2b)
+![Fig2](images/image2.png "Fig 2")
+![Fig2b](images/image3.png "Fig 2b")
 
 EDA:
 
@@ -91,30 +92,30 @@ Our decision to use treemaps was inspired from the A Study on the Effectiveness 
 
 On default, this page will view the top 10 highest impact index by food type of food products. The user is able to use the selector to select commodities they are interested in. The user will also be able to switch between Commodity or Specific Food Products. Selecting the bars will highlight for the stack bar chart view, and change the view of the treemaps as to now only contain the selected commodity. This will allow the user to compare between the food products the user selected.
 
-(insert viz3)
+![Fig3](images/image4.png "Fig 3")
 
 Additionally, double clicking on the legend (specific legend type) would allow the user to switch to this view for the stack graph.
 
-(insert viz3b)
+![Fig3b](images/image5.png "Fig 3b")
 
 We want users to be motivated to stop food waste. Thus we project some metrics that show how much they could save over time if they remain consistent. First, we compare metrics of the worst (most lossy) and best (least lossy) commodity in the bar chart from Fig 3. In the example below it’s beef and coffee. We give metrics for the impact a user could make if they stopped buying and wasting beef and compare these metrics to tangible things like showers.
 
-(insert viz4)
+![Fig4](images/image6.png "Fig 4")
 
 *ML*:
 The last section of our app encourages users to be an active part of the solution. They can input their ingredients and the TF-IDF model outputs the top 5 recipes in detail for those ingredients along with their environmental impacts. Lastly, we show another metric-driven visualization to highlight the differences between the most and least lossy recipes from the top 5. 
 
 Users may enter five ingredients present in their refrigerator in the textbox and click on the Find recipes button to generate recipes that contain those ingredients. After this has been done you will be able to see a horizontal stacked bar chart showing their 5 ingredients. As with the horizontal stacked bar chart described in the above section, this stacked bar chart will serve the same purpose by displaying the impact index by food type. To aid the user in being able to understand the impact of the food type, a treemap has also been added.
 
-(insert viz5)
+![Fig5](images/image7.png "Fig 5")
 
 As a result of the TF-IDF model, under the tree maps, you will see a breakdown of the top five recipes for each of the five ingredients. There is no doubt that this model is very effective as it will facilitate user efficiency and save the planet at the same time. As opposed to the user having to go to the internet to find a recipe that uses the ingredients they currently have, the model will automatically provide the user with multiple recipes that will match those ingredients. Furthermore, the model also offers to the user several recipes from which they can choose. By adding this feature, we are hoping to encourage the user to eat from the ingredients that they already have instead of going out to eat or purchasing items that they do not need.
 
-(insert viz6)
+![Fig6](images/image8.png "Fig 6")
 
 As an added feature, we also provide the user with a way to view how much environmental impact they are contributing to by swapping recipes. From the example below, if the user swaps from cheesy pizza macaroni to Carmen Jackson's Swedish eggs rara, then they are able to reduce the environmental impact index by 76.72%. Considering our potential diverse users have a variety of educational and knowledge background, we have added additional content to translate the 76.72% impact into something that is more relatable to their day-to-day lives in order to make the 76.72% impact more meaningful. An example would be that by swapping the recipes the user has contributed to the preservation of the land surface equivalent to four basketball courts. Another example as a result of the swap, eight car trips between Pittsburgh and New York City were saved.
 
-(viz7)
+![Fig7](images/image9.png "Fig 7")
 
 ## Discussion
 
@@ -126,24 +127,25 @@ Through the choropleth map, the user can see how their country compares to the a
 
 As discussed in the Results section, the stack bar chart gives the user insights to the top ten commodities that have the highest impact index.  Some insights the user gains from the stack bar chart is that big mammals like cows and lamb are at the top of this chart, followed by their products such as cheese and dairy products from cows. Following this category are prawns and fish. This pattern is important to make note, as it’s a set up for the insights discussed below.
 
-(viz 8)
+![Fig8](images/image10.png "Fig 8")
 
 Through the tree map, the user can compare per category of impact which commodity is more detrimental (land use, water use, greenhouse gas emissions, and eutrophication emission). In the freshwater withdrawals, it’s interesting to see that farmed fish and farmed prawns are actually not in the first and second place. Instead, cheese and nuts are what withdraws the most liter of water per kg of these food products. For greenhouse gas emissions, it’s interesting to see dark chocolate is in second place just after beef for its emission. For land use, it’s interesting to see that lamb and beef are much more costly than the rest of the categories. It’s surprising that fish (farmed), and prawns (farmed) are actually at the bottom of this chart even though they were high on the water withdrawals chart. The eutrophication graph isn’t quite as surprising as the other graphs in that beef, fish, prawns and lambs all take the top categories, so this trend is very similar to the one we see with the stack charts.
 
-(viz 9)
+![Fig9](images/image11.png "Fig 9")
 
 Furthermore, when the user selects multiple charts, they will see insights about how swapping between the top and bottom costs or save on environmental impact. The insights will compare a swap between the most costly commodity with the least costly from the selected commodities. As the default, this swap is between Beef (beef herd) and coffee, which will decrease the environmental impact index by 79.27%, protect a land surface equal to 265 basketball courts, save 8671 showers, and save 173 car trips between Pittsburgh and NYC. These insights are contextualized, as basketball courts for land use, instead of providing the user a number such as 111,300 meter squared which is a lot harder for an average user to imagine and find meaning in this number.
 
-(viz 10)
+![Fig10](images/image12.png "Fig 10")
 
 *ML:*
 
 Similar to the commodity section, the recipes section also allows the user to notice some trends and compare the impact between different recipes. The user can gain insights on which recipe consumes the highest impact overall or per category. With these insights, for example, the user with ingredients in their fridge to make these 5 recipes might choose to make cheesy pizza macaroni since it’s the one that has the most environmental impact. This is because the ingredients in this high impact recipe if not used would contribute to food waste, which since this recipe has the highest impact index would mean that it’s the most detrimental to the environment. However for future grocery trips, the user can maybe think about choosing a less environmental impact recipe like cheese omelet. The list of ingredients for each recipe is listed in our app, which will make their shopping trips easier and more informative.
 
-(viz11)
+![Fig11](images/image13.png "Fig 11")
 
 Furthermore, insights between recipe swaps are also provided and are contextualized. These insights help the user be more encouraged to perform a recipe swap in the future.
-(viz 12)
+
+![Fig12](images/image14.png "Fig 12")
 
 ## Future Work
 

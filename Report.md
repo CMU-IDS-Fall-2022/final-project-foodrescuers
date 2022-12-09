@@ -2,7 +2,7 @@
 
 **Project URL**: https://cmu-ids-fall-2022-final-project-foodrescue-streamlit-app-ung2fe.streamlit.app/ \
 **Github URL**: https://github.com/CMU-IDS-Fall-2022/final-project-foodrescuers/ \
-**Video URL**: https://drive.google.com/file/d/1uTulnJbkKGVk8WHqAZgV54QkINhEmrhn/view?usp=sharing \
+**Video URL**: https://drive.google.com/file/d/1uTulnJbkKGVk8WHqAZgV54QkINhEmrhn/view \
 
 According to the United States Department of Agriculture (USDA), between 30 - 40 percent of the food supply in the US is wasted. This corresponds to about 133 billion pounds and $161 billion worth of food in 2010. This is not just a problem in the United States; one-third of food produced for human consumption is lost or wasted globally.
 
